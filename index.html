@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Redação App - Full Version</title>
+    <title>Redação App</title>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -28,11 +28,19 @@
             --input: #2a2a2a;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        /* REMOVE O EFEITO AZUL CHATO NO CELULAR */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Remove o destaque azul */
+            outline: none;
+        }
         
         body { display: flex; min-height: 100vh; background: var(--bg); color: var(--text); transition: 0.3s; }
 
-        /* --- SIDEBAR (Mantendo todas as funcionalidades) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             width: 230px;
             background: var(--sidebar);
@@ -54,9 +62,10 @@
         .menu button {
             display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: none; 
             background: none; color: #ccc; border-radius: 12px; cursor: pointer; transition: 0.2s;
-            width: 100%; height: 48px; white-space: nowrap; overflow: hidden;
+            width: 100%; height: 48px; white-space: nowrap;
         }
 
+        /* Centralização perfeita quando minimizado */
         .sidebar.collapsed .menu button { justify-content: center; padding: 12px 0; }
         .menu button span:first-child { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
 
@@ -70,54 +79,37 @@
 
         .menu button:hover { background: #2a2a2f; color: white; }
         .menu button.active:not(.btn-home) { background: var(--primary); color: white; font-weight: bold; }
-        
         .sidebar.collapsed button span:last-child { display: none; }
 
         /* --- CONTEÚDO --- */
-        .main { flex: 1; padding: 20px; width: 100%; max-width: 1200px; margin: 0 auto; transition: 0.3s; }
-        
+        .main { flex: 1; padding: 20px; width: 100%; max-width: 1200px; margin: 0 auto; }
         .topbar { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; align-items: center; }
-        .icon-btn { padding: 10px 15px; border: none; border-radius: 10px; background: var(--card); color: var(--text); cursor: pointer; font-weight: 500; display: flex; align-items: center; justify-content: center; }
+        .icon-btn { padding: 10px 15px; border: none; border-radius: 10px; background: var(--card); color: var(--text); cursor: pointer; }
 
         .search { width: 100%; padding: 14px; margin-bottom: 20px; border: none; border-radius: 12px; background: var(--input); color: var(--text); font-size: 16px; }
-
         .banner { padding: 25px; border-radius: 16px; background: linear-gradient(135deg,#7b2cff,#a855f7); color: white; margin-bottom: 25px; }
 
+        /* --- FORMULÁRIO --- */
         .form { background: var(--card); padding: 20px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         input, textarea, select { width: 100%; margin-top: 12px; padding: 12px; border: none; border-radius: 10px; background: var(--input); color: var(--text); font-size: 15px; }
         .form button { width: 100%; margin-top: 15px; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; }
 
+        /* --- CARDS --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
         .card { background: var(--card); padding: 20px; border-radius: 16px; cursor: pointer; transition: 0.3s; border: 1px solid rgba(0,0,0,0.03); }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-
         .status-dots { display: flex; gap: 8px; margin-bottom: 10px; }
-        .dot { width: 14px; height: 14px; border-radius: 50%; opacity: 0.3; cursor: pointer; }
+        .dot { width: 14px; height: 14px; border-radius: 50%; opacity: 0.3; }
         .dot.active { opacity: 1; transform: scale(1.1); }
         .red { background: #dc2626; } .yellow { background: #eab308; } .green { background: #16a34a; }
 
-        /* --- MOBILE FULL ADAPTATION --- */
+        /* --- MOBILE --- */
         @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: -230px; /* Escondido por padrão */
-                height: 100vh;
-                box-shadow: 10px 0 30px rgba(0,0,0,0.3);
-            }
-            .sidebar.active { left: 0; } /* Abre como gaveta */
-            
+            .sidebar { position: fixed; left: -230px; height: 100vh; box-shadow: 10px 0 30px rgba(0,0,0,0.3); }
+            .sidebar.active { left: 0; }
+            .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 90; }
+            .overlay.active { display: block; }
             .main { padding: 15px; }
             .grid { grid-template-columns: 1fr; }
-            
-            /* Overlay quando o menu abre no mobile */
-            .overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0,0,0,0.5);
-                z-index: 90;
-            }
-            .overlay.active { display: block; }
         }
 
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; padding: 15px; z-index: 200; backdrop-filter: blur(4px); }
@@ -143,20 +135,18 @@
 
 <div class="main">
     <div class="topbar">
-        <div>
-            <button class="icon-btn" onclick="toggleMenu()">☰</button>
-        </div>
+        <button class="icon-btn" onclick="toggleMenu()">☰</button>
         <div style="display: flex; gap: 8px;">
             <button class="icon-btn" onclick="toggleTema()">🌙</button>
             <button class="icon-btn" id="btnLogin" onclick="handleAuth()" style="background: var(--primary); color: white;">Login</button>
         </div>
     </div>
 
-    <input class="search" id="busca" placeholder="Pesquisar repertório..." oninput="render()">
+    <input class="search" id="busca" placeholder="Pesquisar..." oninput="render()">
 
     <div class="banner">
-        <h2 id="welcomeText">Repositório nota 1000</h2>
-        <p id="userStatus" style="font-size: 14px; margin-top: 5px;">Acesse todos os seus botões e filtros aqui.</p>
+        <h2 id="welcomeText">Meus repertórios</h2>
+        <p id="userStatus" style="font-size: 14px; margin-top: 5px;">Menu limpo e sem bordas azuis.</p>
     </div>
 
     <div class="form">
@@ -168,9 +158,8 @@
             <option>Saúde</option>
             <option>Meio Ambiente</option>
         </select>
-        <input id="uso" placeholder="Onde usar?">
-        <textarea id="descricao" rows="3" placeholder="Descrição..."></textarea>
-        <button onclick="salvar()">Salvar Agora</button>
+        <textarea id="descricao" rows="3" placeholder="Repertório..."></textarea>
+        <button onclick="salvar()">Salvar</button>
     </div>
 
     <div class="grid" id="lista"></div>
@@ -178,29 +167,25 @@
 
 <div class="modal" id="modal" onclick="fechar(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <button onclick="fechar()" style="float:right; background:none; border:none; font-size:22px; color:var(--text); cursor:pointer;">✕</button>
-        <h3 id="mTitulo" style="margin-top: 15px;"></h3>
-        <p style="margin-top: 10px; font-size: 14px;"><b>Eixo:</b> <span id="mCategoria"></span></p>
-        <div id="mDescricao" style="margin-top: 20px; line-height: 1.6; white-space: pre-wrap;"></div>
-        <div style="margin-top: 30px; display: flex; gap: 10px;">
-            <button onclick="deletar()" style="background: #ff4d4d; color: white; border: none; padding: 10px; border-radius: 8px; flex: 1;">Excluir</button>
-            <button onclick="fechar()" style="background: var(--input); color: var(--text); border: none; padding: 10px; border-radius: 8px; flex: 1;">Fechar</button>
+        <button onclick="fechar()" style="float:right; border:none; background:none; font-size:20px; cursor:pointer;">✕</button>
+        <h3 id="mTitulo"></h3>
+        <p id="mCategoria" style="color:var(--primary); font-size: 14px; margin: 10px 0;"></p>
+        <div id="mDescricao" style="line-height: 1.6; white-space: pre-wrap;"></div>
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+            <button onclick="deletar()" style="flex: 1; padding: 12px; background: #ff4d4d; color: white; border: none; border-radius: 8px;">Excluir</button>
         </div>
     </div>
 </div>
 
 <script>
-    // --- LÓGICA DE INTERFACE ---
+    // Lógica de Interface
     function toggleMenu() {
         const sidebar = document.getElementById("sidebar");
         const overlay = document.getElementById("overlay");
-        
         if (window.innerWidth <= 768) {
-            // No Mobile: Abre/Fecha a gaveta
             sidebar.classList.toggle("active");
             overlay.classList.toggle("active");
         } else {
-            // No Desktop: Minimiza/Expande (vira o "R")
             sidebar.classList.toggle("collapsed");
         }
     }
@@ -210,12 +195,12 @@
         btn.classList.add("active");
         filtroAtual = cat;
         render();
-        
-        // No mobile, fecha o menu automaticamente ao escolher uma categoria
         if (window.innerWidth <= 768) toggleMenu();
     }
 
-    // --- FIREBASE CONFIG (COLE AQUI) ---
+    function toggleTema() { document.body.classList.toggle("dark"); }
+
+    // --- FIREBASE (Configure suas chaves aqui) ---
     const firebaseConfig = {
   apiKey: "AIzaSyBxm6ENo7qiMKPCLwsCBHKTH37Wov5CNLI",
   authDomain: "redacaorep.firebaseapp.com",
@@ -226,60 +211,42 @@
   measurementId: "G-WCSMVK7V02"
 };
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-
     let dados = [];
     let filtroAtual = "Todos";
     let indexAtual = null;
-    let userLogado = null;
 
     auth.onAuthStateChanged(user => {
-        userLogado = user;
-        const btnLogin = document.getElementById("btnLogin");
         if (user) {
-            btnLogin.innerText = "Sair";
-            escutarDados();
+            document.getElementById("btnLogin").innerText = "Sair";
+            db.collection("repertorios").where("userId", "==", user.uid).onSnapshot(snap => {
+                dados = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                render();
+            });
         } else {
-            btnLogin.innerText = "Login";
+            document.getElementById("btnLogin").innerText = "Login";
             dados = JSON.parse(localStorage.getItem("reps")) || [];
             render();
         }
     });
 
     function handleAuth() {
-        if (userLogado) auth.signOut();
+        if (auth.currentUser) auth.signOut();
         else auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
     }
 
-    function escutarDados() {
-        db.collection("repertorios").where("userId", "==", userLogado.uid)
-          .onSnapshot(snap => {
-              dados = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              render();
-          });
-    }
-
     async function salvar() {
-        if(!titulo.value || !descricao.value) return;
-        const novo = {
-            titulo: titulo.value,
-            categoria: categoria.value,
-            uso: uso.value,
-            descricao: descricao.value,
-            status: "medio",
-            data: new Date().getTime()
-        };
-        if (userLogado) {
-            novo.userId = userLogado.uid;
+        const t = document.getElementById("titulo"), d = document.getElementById("descricao"), c = document.getElementById("categoria");
+        if(!t.value || !d.value) return;
+        const novo = { titulo: t.value, categoria: c.value, descricao: d.value, status: "medio", data: Date.now() };
+        if (auth.currentUser) {
+            novo.userId = auth.currentUser.uid;
             await db.collection("repertorios").add(novo);
         } else {
             dados.push(novo);
             localStorage.setItem("reps", JSON.stringify(dados));
             render();
         }
-        titulo.value = ""; uso.value = ""; descricao.value = "";
+        t.value = ""; d.value = "";
     }
 
     function render() {
@@ -297,7 +264,6 @@
                         <div class="dot green ${r.status==='forte'?'active':''}" onclick="event.stopPropagation(); setStatus(${i},'forte')"></div>
                     </div>
                     <h3>${r.titulo}</h3>
-                    <p style="font-size: 13px; opacity: 0.7; margin-top: 5px;">${r.uso}</p>
                 </div>`;
         });
     }
@@ -312,17 +278,16 @@
     }
 
     function fechar(e) { if(!e || e.target.id === "modal") modal.style.display = "none"; }
-    function toggleTema() { document.body.classList.toggle("dark"); }
 
     async function setStatus(idx, tipo) {
-        if (userLogado) await db.collection("repertorios").doc(dados[idx].id).update({ status: tipo });
+        if (auth.currentUser) await db.collection("repertorios").doc(dados[idx].id).update({ status: tipo });
         else { dados[idx].status = tipo; localStorage.setItem("reps", JSON.stringify(dados)); render(); }
     }
 
     async function deletar() {
         if(!confirm("Excluir?")) return;
-        if (userLogado) await db.collection("repertorios").doc(dados[indexAtual].id).delete();
-        else { dados.splice(indexAtual, 1); localStorage.setItem("reps", JSON.stringify(dados)); }
+        if (auth.currentUser) await db.collection("repertorios").doc(dados[indexAtual].id).delete();
+        else dados.splice(indexAtual, 1);
         fechar(); render();
     }
 
