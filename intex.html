@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redação App - Cloud</title>
+    
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+    <div class="logo" id="logo">Redação</div>
+    <div class="menu">
+        <button class="active" onclick="setFiltro(this,'Todos')">🏠 <span>Home</span></button>
+        <button onclick="setFiltro(this,'Direitos Humanos')">🌍 <span>Direitos</span></button>
+        <button onclick="setFiltro(this,'Educação')">🎓 <span>Educação</span></button>
+        <button onclick="setFiltro(this,'Tecnologia')">💻 <span>Tecno</span></button>
+        <button onclick="setFiltro(this,'Saúde')">❤️ <span>Saúde</span></button>
+        <button onclick="setFiltro(this,'Meio Ambiente')">🌱 <span>Ambient</span></button>
+    </div>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <div>
+            <button class="icon-btn" onclick="toggleMenu()" id="btnMenuDesk">☰</button>
+            <button class="icon-btn" onclick="toggleTema()">🌙</button>
+        </div>
+        <button class="icon-btn" id="btnLogin" onclick="handleAuth()" style="background: var(--primary); color: white;">Login</button>
+    </div>
+
+    <input class="search" id="busca" placeholder="Pesquisar..." oninput="render()">
+
+    <div class="banner">
+        <h2 id="welcomeText">Organize seus repertórios</h2>
+        <p id="userStatus" style="font-size: 14px; margin-top: 5px;">Salve na nuvem para não perder nada.</p>
+    </div>
+
+    <div class="form">
+        <input id="titulo" placeholder="Título do Repertório">
+        <select id="categoria">
+            <option>Direitos Humanos</option>
+            <option>Educação</option>
+            <option>Tecnologia</option>
+            <option>Saúde</option>
+            <option>Meio Ambiente</option>
+        </select>
+        <input id="uso" placeholder="Onde usar?">
+        <textarea id="descricao" rows="4" placeholder="Descrição completa..."></textarea>
+        <button onclick="salvar()">Salvar Agora</button>
+    </div>
+
+    <div class="grid" id="lista"></div>
+</div>
+
+<div class="modal" id="modal" onclick="fechar(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button onclick="fechar()" style="float:right; background:none; border:none; font-size:22px; color:var(--text); cursor:pointer;">✕</button>
+        <div id="modalDots"></div>
+        <h3 id="mTitulo" style="margin-top: 15px;"></h3>
+        <p style="margin-top: 10px; font-size: 14px; opacity: 0.8;"><b>Eixo:</b> <span id="mCategoria"></span></p>
+        <p style="font-size: 14px; opacity: 0.8;"><b>Uso:</b> <span id="mUso"></span></p>
+        <div id="mDescricao" style="margin-top: 20px; line-height: 1.6; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 15px; white-space: pre-wrap;"></div>
+        
+        <div style="margin-top: 30px; display: flex; gap: 10px;">
+            <button onclick="deletar()" style="background: #ff4d4d; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; flex: 1;">Excluir</button>
+            <button onclick="fechar()" style="background: var(--input); color: var(--text); border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; flex: 1;">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
