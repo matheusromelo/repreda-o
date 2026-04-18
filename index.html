@@ -3,14 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redação App - Cloud</title>
-    
-    <link rel="stylesheet" href="style.css">
+    <title>Redação App - Adaptativo</title>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root{
+            --bg:#f4f4f7;
+            --card:#ffffff;
+            --text:#1a1a1a;
+            --primary:#7b2cff;
+            --sidebar:#1a1a1d;
+            --input:#eee;
+        }
+
+        .dark{
+            --bg:#0f0f0f;
+            --card:#1c1c1c;
+            --text:#ffffff;
+            --primary:#9b5cff;
+            --sidebar:#141416;
+            --input:#2a2a2a;
+        }
+
+        *{margin:0;padding:0;box-sizing:border-box;font-family: 'Segoe UI', sans-serif;}
+        
+        body{
+            display:flex;
+            min-height:100vh;
+            background:var(--bg);
+            color:var(--text);
+            transition: background 0.3s;
+        }
+
+        /* --- SIDEBAR (Desktop) --- */
+        .sidebar{
+            width:230px;
+            background:var(--sidebar);
+            padding:20px 10px;
+            transition: width 0.3s;
+            display:flex;
+            flex-direction:column;
+            z-index: 10;
+        }
+
+        .sidebar.collapsed{ width:80px; align-items:center; }
+        .logo{ text-align:center; color:var(--primary); font-weight:bold; margin-bottom:25px; font-size:18px; }
+        .sidebar.collapsed .logo{ font-size:24px; }
+
+        .menu{ display:flex; flex-direction:column; gap:8px; }
+        .menu button{
+            display:flex; align-items:center; gap:12px; padding:12px;
+            border:none; background:none; color:#ccc; border-radius:10px;
+            cursor:pointer; text-align: left; transition: 0.2s;
+        }
+        .menu button:hover{ background:#2a2a2f; color:white; }
+        .menu button.active{ background:var(--primary); color:white; font-weight:bold; }
+        .sidebar.collapsed span{ display:none; }
+
+        /* --- MAIN CONTENT --- */
+        .main{
+            flex:1;
+            padding:20px;
+            width:100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            transition: padding 0.3s;
+        }
+
+        .topbar{ display:flex; justify-content:space-between; gap: 10px; margin-bottom:20px; }
+        .icon-btn{ padding:10px 15px; border:none; border-radius:10px; background:var(--card); color:var(--text); cursor: pointer; font-weight: 500; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+        .search{ width:100%; padding:14px; margin-bottom:20px; border:none; border-radius:12px; background:var(--input); color:var(--text); font-size: 16px; }
+
+        .banner{ padding:25px; border-radius:16px; background:linear-gradient(135deg,#7b2cff,#a855f7); color:white; margin-bottom:25px; }
+
+        /* --- FORM --- */
+        .form{ background:var(--card); padding:20px; border-radius:16px; margin-bottom:25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        input, textarea, select{ width:100%; margin-top:12px; padding:12px; border:none; border-radius:10px; background:var(--input); color:var(--text); font-size: 15px; }
+        .form button{ width: 100%; margin-top:15px; padding:14px; background:var(--primary); color:white; border:none; border-radius:10px; cursor: pointer; font-weight: bold; font-size: 16px; }
+
+        /* --- GRID & CARDS --- */
+        .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:15px; }
+        .card{ background:var(--card); padding:20px; border-radius:16px; cursor:pointer; transition:0.3s; border: 1px solid rgba(0,0,0,0.03); }
+        .card:hover{ transform:translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+
+        .status-dots{ display:flex; gap:8px; margin-bottom:10px; }
+        .dot{ width:14px; height:14px; border-radius:50%; opacity:0.3; cursor:pointer; }
+        .dot.active{ opacity:1; transform: scale(1.1); }
+        .red{background:#dc2626;} .yellow{background:#eab308;} .green{background:#16a34a;}
+
+        /* --- MODAL --- */
+        .modal{ position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; justify-content:center; align-items:center; padding:15px; z-index: 100; backdrop-filter: blur(4px); }
+        .modal-content{ background:var(--card); width:100%; max-width:600px; max-height:85vh; overflow-y:auto; border-radius:20px; padding:30px; position:relative; }
+
+        /* --- RESPONSIVIDADE (CELULAR) --- */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 10px;
+                order: 2; /* Move menu para baixo ou topo conforme preferência */
+                position: sticky;
+                bottom: 0;
+            }
+
+            .sidebar.collapsed { width: 100%; }
+            .logo { display: none; }
+            
+            .menu {
+                flex-direction: row;
+                justify-content: space-around;
+                overflow-x: auto;
+            }
+
+            .menu button {
+                flex-direction: column;
+                gap: 4px;
+                font-size: 11px;
+                padding: 8px;
+                min-width: 60px;
+                text-align: center;
+            }
+
+            .menu button span { display: block !important; }
+
+            .main { padding: 15px; order: 1; padding-bottom: 80px; }
+            .grid { grid-template-columns: 1fr; } /* Cards ocupam largura total */
+            
+            .banner h2 { font-size: 20px; }
+            .modal-content { padding: 20px; width: 95%; }
+        }
+    </style>
 </head>
+
 <body>
 
 <div class="sidebar" id="sidebar">
@@ -74,6 +204,142 @@
     </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+// --- CONFIGURAÇÃO FIREBASE (COLE SUAS CHAVES AQUI) ---
+const firebaseConfig = {
+    apiKey: "SUA_API_KEY",
+    authDomain: "SEU_DOMINIO.firebaseapp.com",
+    projectId: "SEU_PROJETO",
+    storageBucket: "SEU_PROJETO.appspot.com",
+    messagingSenderId: "SEU_ID",
+    appId: "SEU_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let dados = [];
+let filtroAtual = "Todos";
+let indexAtual = null;
+let userLogado = null;
+
+auth.onAuthStateChanged(user => {
+    userLogado = user;
+    const btnLogin = document.getElementById("btnLogin");
+    const userStatus = document.getElementById("userStatus");
+    if (user) {
+        btnLogin.innerText = "Sair";
+        userStatus.innerText = `Logado como: ${user.displayName}`;
+        escutarDados();
+    } else {
+        btnLogin.innerText = "Login";
+        userStatus.innerText = "Modo offline. Entre para sincronizar.";
+        dados = JSON.parse(localStorage.getItem("reps")) || [];
+        render();
+    }
+});
+
+function handleAuth() {
+    if (userLogado) auth.signOut();
+    else auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+}
+
+function escutarDados() {
+    db.collection("repertorios").where("userId", "==", userLogado.uid)
+      .onSnapshot(snap => {
+          dados = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          render();
+      });
+}
+
+async function salvar() {
+    if(!titulo.value || !descricao.value) return alert("Preencha o título e a descrição!");
+    const novo = {
+        titulo: titulo.value,
+        categoria: categoria.value,
+        uso: uso.value,
+        descricao: descricao.value,
+        status: "medio",
+        data: new Date().getTime()
+    };
+
+    if (userLogado) {
+        novo.userId = userLogado.uid;
+        await db.collection("repertorios").add(novo);
+    } else {
+        dados.push(novo);
+        localStorage.setItem("reps", JSON.stringify(dados));
+        render();
+    }
+    titulo.value = ""; uso.value = ""; descricao.value = "";
+}
+
+async function setStatus(idx, tipo) {
+    if (userLogado && dados[idx].id) {
+        await db.collection("repertorios").doc(dados[idx].id).update({ status: tipo });
+    } else {
+        dados[idx].status = tipo;
+        localStorage.setItem("reps", JSON.stringify(dados));
+        render();
+    }
+}
+
+async function deletar() {
+    if(!confirm("Excluir definitivamente?")) return;
+    if (userLogado && dados[indexAtual].id) {
+        await db.collection("repertorios").doc(dados[indexAtual].id).delete();
+    } else {
+        dados.splice(indexAtual, 1);
+        localStorage.setItem("reps", JSON.stringify(dados));
+    }
+    fechar();
+    render();
+}
+
+function render() {
+    const lista = document.getElementById("lista");
+    const busca = document.getElementById("busca").value.toLowerCase();
+    lista.innerHTML = "";
+    dados.forEach((r, i) => {
+        if(filtroAtual !== "Todos" && r.categoria !== filtroAtual) return;
+        if(!r.titulo.toLowerCase().includes(busca)) return;
+        lista.innerHTML += `
+            <div class="card" onclick="abrir(${i})">
+                <div class="status-dots">
+                    <div class="dot red ${r.status==='fraco'?'active':''}" onclick="event.stopPropagation(); setStatus(${i},'fraco')"></div>
+                    <div class="dot yellow ${r.status==='medio'?'active':''}" onclick="event.stopPropagation(); setStatus(${i},'medio')"></div>
+                    <div class="dot green ${r.status==='forte'?'active':''}" onclick="event.stopPropagation(); setStatus(${i},'forte')"></div>
+                </div>
+                <h3 style="font-size: 17px;">${r.titulo}</h3>
+                <p style="font-size: 13px; opacity: 0.7; margin-top: 5px;">${r.uso}</p>
+            </div>`;
+    });
+}
+
+function abrir(i) {
+    indexAtual = i;
+    const r = dados[i];
+    document.getElementById("mTitulo").innerText = r.titulo;
+    document.getElementById("mCategoria").innerText = r.categoria;
+    document.getElementById("mUso").innerText = r.uso;
+    document.getElementById("mDescricao").innerText = r.descricao;
+    document.getElementById("modal").style.display = "flex";
+}
+
+function fechar(e) { if(!e || e.target.id === "modal") document.getElementById("modal").style.display = "none"; }
+function toggleTema() { document.body.classList.toggle("dark"); }
+function toggleMenu() { 
+    const s = document.getElementById("sidebar");
+    s.classList.toggle("collapsed");
+}
+function setFiltro(btn, cat) {
+    document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    filtroAtual = cat;
+    render();
+}
+render();
+</script>
 </body>
 </html>
