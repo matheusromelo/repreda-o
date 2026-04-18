@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Redação Pro - Edição Definitiva</title>
+    <title>Redação Pro - Login Ativo</title>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -47,17 +47,14 @@
         .user-banner { background: var(--primary); color: white; padding: 25px; border-radius: 24px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 25px rgba(123, 44, 255, 0.2); }
 
         /* --- INPUTS & SELECTS --- */
-        input, textarea, select { width: 100%; margin-top: 10px; padding: 16px; border: none; border-radius: 16px; background: var(--input); color: var(--text); font-size: 16px; appearance: none; -webkit-appearance: none; outline: none; transition: 0.2s; }
-        select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238e8e93' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+        input, textarea, select { width: 100%; margin-top: 10px; padding: 16px; border: none; border-radius: 16px; background: var(--input); color: var(--text); font-size: 16px; outline: none; transition: 0.2s; }
+        select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238e8e93' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
         textarea { resize: none; overflow: hidden; }
 
         /* --- CARDS --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card { background: var(--card); padding: 25px; border-radius: 24px; box-shadow: var(--shadow); transition: 0.3s ease; border: 1px solid rgba(0,0,0,0.02); }
         .card:hover { transform: translateY(-5px); }
-        .card h3 { color: var(--text); }
-        .card p { color: var(--text-alt); }
-
         .status-dots { display: flex; gap: 8px; margin-bottom: 12px; }
         .dot { width: 12px; height: 12px; border-radius: 6px; opacity: 0.2; cursor: pointer; transition: 0.3s; }
         .dot.active { opacity: 1; transform: scale(1.2); }
@@ -71,15 +68,10 @@
         .flash-back { transform: rotateY(180deg); background: var(--input); }
 
         /* --- MODAL --- */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 1000; backdrop-filter: blur(10px); animation: fadeIn 0.3s ease; }
-        .modal-content { background: var(--card); width: 100%; max-width: 500px; padding: 40px 30px; border-radius: 32px; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.2); animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; color: var(--text); }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 1000; backdrop-filter: blur(10px); }
+        .modal-content { background: var(--card); width: 100%; max-width: 500px; padding: 40px 30px; border-radius: 32px; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.2); transform: scale(0.9); transition: 0.3s; color: var(--text); }
         .close-btn { position: absolute; top: 20px; right: 20px; width: 36px; height: 36px; background: var(--input); border-radius: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; color: var(--text-alt); }
-
         .btn-save { width: 100%; margin-top: 25px; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 18px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-save:active { transform: scale(0.98); }
-
-        @keyframes pop { from { transform: scale(0.9); } to { transform: scale(1); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 768px) {
             .sidebar { position: fixed; left: -240px; height: 100vh; width: 240px; align-items: flex-start; padding: 20px 15px; }
@@ -116,9 +108,9 @@
     <div class="user-banner">
         <div>
             <h2 id="userName" style="font-size: 24px;">Olá, Estudante!</h2>
-            <p style="opacity: 0.9; font-size: 14px;">Pronto para evoluir sua escrita?</p>
+            <p id="userStatus" style="opacity: 0.9; font-size: 14px;">Logue para salvar na nuvem.</p>
         </div>
-        <button id="btnLogin" onclick="handleAuth()" style="background: rgba(255,255,255,0.2); border:none; padding:10px 20px; border-radius:14px; color:white; font-weight:bold; cursor:pointer;">Login</button>
+        <button id="btnLogin" onclick="handleAuth()" style="background: rgba(255,255,255,0.2); border:none; padding:10px 20px; border-radius:14px; color:white; font-weight:bold; cursor:pointer;">Login Google</button>
     </div>
 
     <div id="tab-home" class="section">
@@ -127,8 +119,7 @@
             <div style="display: flex; gap: 10px;">
                 <select id="categoria" style="flex:1;">
                     <option>Direitos Humanos</option><option>Educação</option>
-                    <option>Tecnologia</option><option>Saúde</option>
-                    <option>Meio Ambiente</option>
+                    <option>Tecnologia</option><option>Saúde</option><option>Meio Ambiente</option>
                 </select>
                 <input id="uso" placeholder="Onde usar?" style="flex:1;">
             </div>
@@ -160,20 +151,16 @@
 </main>
 
 <div class="modal" id="modal" onclick="fecharModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-content" id="modalContent" onclick="event.stopPropagation()">
         <div class="close-btn" onclick="fecharModal()">×</div>
         <div class="status-dots" id="modalDots" style="justify-content: center; margin-bottom: 25px;"></div>
-        <h3 style="text-align: center; margin-bottom: 10px; opacity: 0.7;">Editar Repertório</h3>
-        
         <input id="editTitulo" placeholder="Título">
         <select id="editCat">
             <option>Direitos Humanos</option><option>Educação</option>
-            <option>Tecnologia</option><option>Saúde</option>
-            <option>Meio Ambiente</option>
+            <option>Tecnologia</option><option>Saúde</option><option>Meio Ambiente</option>
         </select>
         <input id="editUso" placeholder="Onde usar?">
         <textarea id="editDesc" placeholder="Descrição" oninput="autoGrow(this)" style="min-height: 120px;"></textarea>
-        
         <div style="display: flex; gap: 10px;">
             <button class="btn-save" onclick="atualizar()" style="flex: 2;">Confirmar</button>
             <button onclick="deletar()" style="flex: 1; margin-top: 25px; border-radius: 18px; border:none; background: #ff3b301a; color:#ff3b30; cursor:pointer;">🗑️</button>
@@ -182,7 +169,8 @@
 </div>
 
 <script>
-    const firebaseConfig = {
+    // IMPORTANTE: COLOQUE SEUS DADOS AQUI PARA O LOGIN FUNCIONAR
+   const firebaseConfig = {
   apiKey: "AIzaSyBxm6ENo7qiMKPCLwsCBHKTH37Wov5CNLI",
   authDomain: "redacaorep.firebaseapp.com",
   projectId: "redacaorep",
@@ -192,6 +180,10 @@
   measurementId: "G-WCSMVK7V02"
 };
 
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
     let dados = [];
     let filtroAtual = "Todos";
     let flashIndex = 0;
@@ -199,21 +191,39 @@
 
     function autoGrow(el) { el.style.height = "5px"; el.style.height = (el.scrollHeight) + "px"; }
 
+    // Listener de Autenticação
     auth.onAuthStateChanged(user => {
         if (user) {
             document.getElementById("btnLogin").innerText = "Sair";
             document.getElementById("userName").innerText = `Olá, ${user.displayName.split(' ')[0]}!`;
+            document.getElementById("userStatus").innerText = "Sincronizado com a nuvem.";
+            
+            // Puxa dados do Firestore
             db.collection("repertorios").where("userId", "==", user.uid).onSnapshot(snap => {
                 dados = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 render();
             });
         } else {
+            document.getElementById("btnLogin").innerText = "Login Google";
+            document.getElementById("userName").innerText = "Estudante Offline";
+            document.getElementById("userStatus").innerText = "Dados salvos apenas no navegador.";
             dados = JSON.parse(localStorage.getItem("reps")) || [];
             render();
         }
     });
 
-    function handleAuth() { if (auth.currentUser) auth.signOut(); else auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
+    async function handleAuth() {
+        if (auth.currentUser) {
+            auth.signOut();
+        } else {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                await auth.signInWithPopup(provider);
+            } catch (error) {
+                alert("Erro ao fazer login: " + error.message);
+            }
+        }
+    }
 
     function render() {
         const lista = document.getElementById("lista");
@@ -248,23 +258,38 @@
         `;
         document.getElementById('modalDots').innerHTML = dotsHTML;
         document.getElementById('modal').style.display = "flex";
-        setTimeout(() => autoGrow(document.getElementById('editDesc')), 50);
+        setTimeout(() => {
+            document.getElementById('modalContent').style.transform = "scale(1)";
+            autoGrow(document.getElementById('editDesc'));
+        }, 10);
     }
 
     async function salvar() {
         const t = document.getElementById("titulo"), d = document.getElementById("descricao"), u = document.getElementById("uso"), c = document.getElementById("categoria");
         if(!t.value || !d.value) return;
         const n = { titulo: t.value, categoria: c.value, uso: u.value, descricao: d.value, status: "medio", data: Date.now() };
-        if (auth.currentUser) { n.userId = auth.currentUser.uid; await db.collection("repertorios").add(n); }
-        else { dados.push(n); localStorage.setItem("reps", JSON.stringify(dados)); render(); }
+        
+        if (auth.currentUser) {
+            n.userId = auth.currentUser.uid;
+            await db.collection("repertorios").add(n);
+        } else {
+            dados.push(n);
+            localStorage.setItem("reps", JSON.stringify(dados));
+            render();
+        }
         t.value = u.value = d.value = "";
     }
 
     async function atualizar() {
         const t = document.getElementById('editTitulo').value, u = document.getElementById('editUso').value, d = document.getElementById('editDesc').value, c = document.getElementById('editCat').value;
-        if (auth.currentUser) await db.collection("repertorios").doc(dados[indexAtual].id).update({ titulo: t, uso: u, descricao: d, categoria: c });
-        else { Object.assign(dados[indexAtual], {titulo:t, uso:u, descricao:d, categoria:c}); localStorage.setItem("reps", JSON.stringify(dados)); }
-        fecharModal(); render();
+        if (auth.currentUser) {
+            await db.collection("repertorios").doc(dados[indexAtual].id).update({ titulo: t, uso: u, descricao: d, categoria: c });
+        } else {
+            Object.assign(dados[indexAtual], {titulo:t, uso:u, descricao:d, categoria:c});
+            localStorage.setItem("reps", JSON.stringify(dados));
+            render();
+        }
+        fecharModal();
     }
 
     async function updateStatusModal(s) {
@@ -286,8 +311,8 @@
     function setFiltro(btn, cat) { filtroAtual = cat; switchTab('home', btn); render(); }
     function switchTab(tabId, btn) { document.querySelectorAll('.section').forEach(s => s.style.display = 'none'); document.getElementById('tab-' + tabId).style.display = 'block'; document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(window.innerWidth <= 768) toggleMenu(); }
     function toggleMenu() { document.getElementById("sidebar").classList.toggle("active"); document.getElementById("overlay").classList.toggle("active"); if(window.innerWidth > 768) document.getElementById("sidebar").classList.toggle("expanded"); }
-    async function deletar() { if(!confirm("Excluir?")) return; if (auth.currentUser) await db.collection("repertorios").doc(dados[indexAtual].id).delete(); else { dados.splice(indexAtual, 1); localStorage.setItem("reps", JSON.stringify(dados)); } fecharModal(); render(); }
-    function fecharModal(e) { if(!e || e.target.id === "modal" || e.target.className === "close-btn") document.getElementById('modal').style.display = "none"; }
+    async function deletar() { if(!confirm("Excluir permanentemente?")) return; if (auth.currentUser) await db.collection("repertorios").doc(dados[indexAtual].id).delete(); else { dados.splice(indexAtual, 1); localStorage.setItem("reps", JSON.stringify(dados)); } fecharModal(); render(); }
+    function fecharModal(e) { if(!e || e.target.id === "modal" || e.target.className === "close-btn") { document.getElementById('modalContent').style.transform = "scale(0.9)"; setTimeout(() => document.getElementById('modal').style.display = "none", 200); } }
     function toggleTema() { document.body.classList.toggle("dark"); }
     function updateStatus(e, i, s) { e.stopPropagation(); updateStatusModal(s); }
 
