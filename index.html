@@ -57,6 +57,12 @@
         select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238e8e93' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
         textarea { resize: none; overflow: hidden; }
 
+        /* Barra de Pesquisa */
+        .search-bar { position: relative; margin-bottom: 20px; }
+        .search-bar input { padding-left: 45px; border: 2px solid transparent; transition: 0.3s; }
+        .search-bar input:focus { border-color: var(--primary); background: var(--card); }
+        .search-bar::before { content: "🔍"; position: absolute; left: 18px; top: 26px; z-index: 10; opacity: 0.5; }
+
         .filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 0 5px; }
         .filter-bar span { font-size: 14px; font-weight: 600; color: var(--text-alt); }
         .filter-bar select { margin-top: 0; padding: 8px 30px 8px 15px; font-size: 14px; width: auto; border-radius: 10px; }
@@ -70,7 +76,6 @@
         .dot.active { opacity: 1; transform: scale(1.2); }
         .red { background: #ff3b30; } .yellow { background: #ffcc00; } .green { background: #34c759; }
 
-        /* Flashcards Section */
         .flash-scene { width: 100%; max-width: 400px; height: 300px; perspective: 1000px; margin: 20px auto; }
         .flash-card-inner { width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; position: relative; }
         .flash-card-inner.is-flipped { transform: rotateY(180deg); }
@@ -137,6 +142,10 @@
             </div>
             <textarea id="descricao" placeholder="Explicação..." oninput="autoGrow(this)" style="height: 100px;"></textarea>
             <button class="btn-save" id="btnSalvar" onclick="salvar()">Salvar</button>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" id="inputPesquisa" placeholder="Pesquisar repertórios..." oninput="render()">
         </div>
 
         <div class="filter-bar">
@@ -232,8 +241,18 @@
     function render() {
         const lista = document.getElementById("lista");
         const order = document.getElementById("sortOrder").value;
+        const termoPesquisa = document.getElementById("inputPesquisa").value.toLowerCase();
         lista.innerHTML = "";
-        let exibicao = dados.filter(r => filtroAtual === "Todos" || r.categoria === filtroAtual);
+        
+        // Filtro de Categoria E Filtro de Pesquisa
+        let exibicao = dados.filter(r => {
+            const matchCategoria = filtroAtual === "Todos" || r.categoria === filtroAtual;
+            const matchPesquisa = r.titulo.toLowerCase().includes(termoPesquisa) || 
+                                  r.descricao.toLowerCase().includes(termoPesquisa) || 
+                                  (r.uso && r.uso.toLowerCase().includes(termoPesquisa));
+            return matchCategoria && matchPesquisa;
+        });
+
         if (order === "nome") exibicao.sort((a,b) => a.titulo.localeCompare(b.titulo));
         else if (order === "relevancia") { const peso = { "forte": 3, "medio": 2, "fraco": 1 }; exibicao.sort((a,b) => peso[b.status] - peso[a.status]); }
         else if (order === "data") exibicao.sort((a,b) => b.createdAt - a.createdAt);
@@ -271,17 +290,13 @@
         setTimeout(() => { document.getElementById('modalContent').style.transform = "scale(1)"; autoGrow(document.getElementById('editDesc')); }, 10);
     }
 
-    // --- Lógica Flashcards com Limite de Texto e Pop-up ---
     function updateFlashUI() { 
         if(dados.length > 0) { 
             if(flashIndex >= dados.length) flashIndex = 0; 
             const r = dados[flashIndex]; const cor = getCorEixo(r.categoria);
             document.getElementById('flashTitulo').innerText = r.titulo; 
-            
-            // Lógica de limite de 20 palavras
             const palavras = r.descricao.split(/\s+/);
             const textoLimitado = palavras.length > 20 ? palavras.slice(0, 20).join(" ") + "..." : r.descricao;
-            
             document.getElementById('flashConteudo').innerText = textoLimitado; 
             document.getElementById('faceFrente').style.borderColor = cor;
             document.getElementById('faceFrente').style.color = cor;
@@ -290,12 +305,11 @@
 
     function toggleFlashFlip() { document.getElementById('flashInner').classList.toggle('is-flipped'); }
 
-    // Sistema de clique longo (segurar)
     const flashInner = document.getElementById('flashInner');
     const startHold = () => {
         holdTimer = setTimeout(() => {
             if (flashInner.classList.contains('is-flipped')) {
-                abrirModal(flashIndex); // Reutiliza o modal para mostrar o texto completo
+                abrirModal(flashIndex);
             }
         }, 600);
     };
@@ -310,7 +324,6 @@
     function nextFlash() { document.getElementById('flashInner').classList.remove('is-flipped'); setTimeout(() => { flashIndex = (flashIndex + 1) % dados.length; updateFlashUI(); }, 200); }
     function prevFlash() { document.getElementById('flashInner').classList.remove('is-flipped'); setTimeout(() => { flashIndex = (flashIndex - 1 + dados.length) % dados.length; updateFlashUI(); }, 200); }
 
-    // --- Funções Auxiliares e Firebase ---
     async function deletar(i) {
         if(!confirm("Excluir permanentemente?")) return;
         if (auth.currentUser && dados[i].id) await db.collection("repertorios").doc(dados[i].id).delete();
