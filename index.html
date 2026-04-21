@@ -249,6 +249,14 @@
         
         <div id="display-img-modal" style="display:none; margin-bottom:15px; text-align:center;">
             <img id="img-modal" src="" style="max-width:100%; border-radius:15px; max-height:200px; object-fit:contain; box-shadow: var(--shadow);">
+            <button onclick="removeImgEdit()" style="display:block; margin: 10px auto 0; padding: 6px 15px; background: transparent; color: #ff3b30; border: 1px solid #ff3b30; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold;">Remover Imagem</button>
+        </div>
+
+        <div style="margin-bottom: 25px;">
+            <label for="input-img-edit" style="cursor:pointer; display:block; padding:10px; border-radius:12px; font-size:14px; border:1px dashed var(--primary); text-align:center; color: var(--text-alt);">
+                Adicionar / Alterar Imagem
+            </label>
+            <input type="file" id="input-img-edit" accept="image/*" style="display:none" onchange="previewImageEdit(this)">
         </div>
 
         <div class="status-dots" id="modalDots" style="justify-content: center; margin-bottom: 25px; display: flex; gap: 8px;"></div>
@@ -259,8 +267,10 @@
         <div class="editor-wrapper">
             <div class="toolbar">
                 <button onclick="format('bold')">B</button>
+                <button onclick="format('italic')">I</button>
                 <button class="color-btn" style="background:#ff3b30" onclick="format('foreColor','#ff3b30')"></button>
                 <button class="color-btn" style="background:#007aff" onclick="format('foreColor','#007aff')"></button>
+                <button class="color-btn" style="background:#34c759" onclick="format('foreColor','#34c759')"></button>
                 <button onclick="format('removeFormat')">❌</button>
             </div>
             <div id="editDesc" class="editor-content" contenteditable="true"></div>
@@ -279,7 +289,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let dados = [], filtroAtual = "Todos", flashIndex = 0, indexAtual = null, imagemBase64 = "";
+    let dados = [], filtroAtual = "Todos", flashIndex = 0, indexAtual = null, imagemBase64 = "", imagemEditBase64 = "";
 
     function format(cmd, val) { document.execCommand(cmd, false, val); }
 
@@ -312,6 +322,25 @@
         imagemBase64 = "";
         document.getElementById('input-img').value = "";
         document.getElementById('img-preview-container').style.display = "none";
+    }
+
+    function previewImageEdit(input) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagemEditBase64 = e.target.result;
+                document.getElementById('img-modal').src = imagemEditBase64;
+                document.getElementById('display-img-modal').style.display = "block";
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function removeImgEdit() {
+        imagemEditBase64 = "";
+        document.getElementById('input-img-edit').value = "";
+        document.getElementById('display-img-modal').style.display = "none";
     }
 
     auth.onAuthStateChanged(user => {
@@ -356,7 +385,6 @@
             return matchCategoria && textoBusca.includes(termoPesquisa);
         });
 
-        // Correção da Lógica de Ordenação
         if (order === "nome") exibicao.sort((a,b) => a.titulo.localeCompare(b.titulo));
         else if (order === "relevancia") { const peso = { "forte": 3, "medio": 2, "fraco": 1 }; exibicao.sort((a,b) => peso[b.status] - peso[a.status]); }
         else if (order === "data") exibicao.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -383,6 +411,8 @@
 
     function abrirModal(i) {
         indexAtual = i; const r = dados[i]; const cor = getCorEixo(r.categoria);
+        imagemEditBase64 = r.imagem || "";
+        document.getElementById('input-img-edit').value = "";
         
         const displayImg = document.getElementById('display-img-modal');
         if(r.imagem) {
@@ -438,8 +468,8 @@
 
     async function atualizar() {
         const i = indexAtual, t = document.getElementById('editTitulo').value, u = document.getElementById('editUso').value, d = document.getElementById('editDesc').innerHTML, c = document.getElementById('editCat').value;
-        if (auth.currentUser && dados[i].id) await db.collection("repertorios").doc(dados[i].id).update({ titulo: t, uso: u, descricao: d, categoria: c });
-        else { Object.assign(dados[i], {titulo:t, uso:u, descricao:d, categoria:c}); localStorage.setItem("reps", JSON.stringify(dados)); render(); }
+        if (auth.currentUser && dados[i].id) await db.collection("repertorios").doc(dados[i].id).update({ titulo: t, uso: u, descricao: d, categoria: c, imagem: imagemEditBase64 });
+        else { Object.assign(dados[i], {titulo:t, uso:u, descricao:d, categoria:c, imagem: imagemEditBase64}); localStorage.setItem("reps", JSON.stringify(dados)); render(); }
         fecharModal();
     }
 
