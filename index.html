@@ -27,7 +27,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { display: flex; min-height: 100vh; background: var(--bg); color: var(--text); transition: background 0.3s; }
 
-        .sidebar { width: 80px; background: var(--sidebar); padding: 20px 0; transition: var(--transition); display: flex; flex-direction: column; z-index: 100; align-items: center; overflow-x: hidden; }
+        .sidebar { width: 80px; background: var(--sidebar); padding: 20px 0; transition: var(--transition); display: flex; flex-direction: column; z-index: 1000; align-items: center; overflow-x: hidden; }
         .sidebar.expanded { width: 240px; align-items: flex-start; padding: 20px 15px; }
 
         .logo { height: 60px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 800; margin-bottom: 20px; width: 100%; font-size: 28px; }
@@ -56,7 +56,6 @@
         input, textarea, select { width: 100%; margin-top: 10px; padding: 16px; border: none; border-radius: 16px; background: var(--input); color: var(--text); font-size: 16px; outline: none; }
         select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238e8e93' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
         
-        /* EDITOR DE TEXTO RICO ESTILIZADO */
         .editor-wrapper { background: var(--input); border-radius: 18px; margin-top: 15px; overflow: hidden; border: 2px solid transparent; transition: 0.3s; }
         .editor-wrapper:focus-within { border-color: var(--primary); background: var(--card); }
         .toolbar { display: flex; gap: 8px; padding: 10px; background: rgba(0,0,0,0.03); border-bottom: 1px solid rgba(0,0,0,0.05); flex-wrap: wrap; }
@@ -94,11 +93,34 @@
         .close-btn { position: absolute; top: 15px; right: 15px; width: 36px; height: 36px; background: var(--input); border-radius: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; z-index: 11; }
         .btn-save { width: 100%; margin-top: 25px; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 18px; font-weight: 700; cursor: pointer; transition: background 0.3s; }
 
+        /* --- CORREÇÃO DO MENU MOBILE --- */
         @media (max-width: 768px) {
-            .sidebar { position: fixed; left: -240px; height: 100vh; width: 240px !important; align-items: flex-start; padding: 20px 15px; }
-            .sidebar.active { left: 0; box-shadow: 15px 0 30px rgba(0,0,0,0.2); }
-            .sidebar.active .logo span, .sidebar.active .menu button span:last-child { max-width: 200px; opacity: 1; }
-            .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 90; }
+            .sidebar { 
+                position: fixed; 
+                left: -260px; /* Esconde totalmente */
+                height: 100vh; 
+                width: 260px !important; 
+                align-items: flex-start; 
+                padding: 20px 15px; 
+                z-index: 2000;
+            }
+            .sidebar.active { left: 0; box-shadow: 15px 0 30px rgba(0,0,0,0.3); }
+            
+            /* Força a exibição dos textos e alinhamento quando ativo no mobile */
+            .sidebar.active .logo span, 
+            .sidebar.active .menu button span:last-child { 
+                max-width: 200px; 
+                opacity: 1; 
+                margin-left: 5px;
+            }
+            .sidebar.active .menu { align-items: flex-start; }
+            .sidebar.active .menu button { 
+                width: 100%; 
+                justify-content: flex-start; 
+                padding-left: 15px; 
+            }
+
+            .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1500; backdrop-filter: blur(3px); }
             .overlay.active { display: block; }
         }
     </style>
@@ -230,9 +252,8 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let dados = [], filtroAtual = "Todos", flashIndex = 0, indexAtual = null, holdTimer;
+    let dados = [], filtroAtual = "Todos", flashIndex = 0, indexAtual = null;
 
-    // NOVO: Função de formatação
     function format(cmd, val) { document.execCommand(cmd, false, val); }
 
     function getCorEixo(cat) {
@@ -273,7 +294,6 @@
         
         let exibicao = dados.filter(r => {
             const matchCategoria = filtroAtual === "Todos" || r.categoria === filtroAtual;
-            // Busca considerando texto puro sem as tags de cor do editor
             const textoBusca = (r.titulo + (r.uso||'') + r.descricao.replace(/<[^>]*>/g, '')).toLowerCase();
             return matchCategoria && textoBusca.includes(termoPesquisa);
         });
@@ -307,7 +327,7 @@
         document.getElementById('btnConfirmar').style.background = cor;
         document.getElementById('editTitulo').value = r.titulo;
         document.getElementById('editUso').value = r.uso || "";
-        document.getElementById('editDesc').innerHTML = r.descricao; // Renderiza o HTML com as cores
+        document.getElementById('editDesc').innerHTML = r.descricao;
         document.getElementById('editCat').value = r.categoria || "Direitos Humanos";
         document.getElementById('modalDots').innerHTML = `<div class="dot red ${r.status==='fraco'?'active':''}" onclick="updateStatusModal('fraco')"></div><div class="dot yellow ${r.status==='medio'?'active':''}" onclick="updateStatusModal('medio')"></div><div class="dot green ${r.status==='forte'?'active':''}" onclick="updateStatusModal('forte')"></div>`;
         document.getElementById('btnDeletar').onclick = () => deletar(i);
@@ -320,7 +340,6 @@
             if(flashIndex >= dados.length) flashIndex = 0; 
             const r = dados[flashIndex]; const cor = getCorEixo(r.categoria);
             document.getElementById('flashTitulo').innerText = r.titulo; 
-            // Mostra o texto puro no flashcard para não quebrar o layout
             document.getElementById('flashConteudo').innerText = r.descricao.replace(/<[^>]*>/g, '').substring(0, 150) + "..."; 
             document.getElementById('faceFrente').style.borderColor = cor;
             document.getElementById('faceFrente').style.color = cor;
@@ -328,7 +347,6 @@
     }
 
     function toggleFlashFlip() { document.getElementById('flashInner').classList.toggle('is-flipped'); }
-
     function nextFlash() { document.getElementById('flashInner').classList.remove('is-flipped'); setTimeout(() => { flashIndex = (flashIndex + 1) % dados.length; updateFlashUI(); }, 200); }
     function prevFlash() { document.getElementById('flashInner').classList.remove('is-flipped'); setTimeout(() => { flashIndex = (flashIndex - 1 + dados.length) % dados.length; updateFlashUI(); }, 200); }
 
@@ -355,7 +373,16 @@
         fecharModal();
     }
 
-    function toggleMenu() { const s = document.getElementById("sidebar"), o = document.getElementById("overlay"); if (window.innerWidth <= 768) { s.classList.toggle("active"); o.classList.toggle("active"); } else { s.classList.toggle("expanded"); } }
+    function toggleMenu() { 
+        const s = document.getElementById("sidebar"), o = document.getElementById("overlay"); 
+        if (window.innerWidth <= 768) { 
+            s.classList.toggle("active"); 
+            o.classList.toggle("active"); 
+        } else { 
+            s.classList.toggle("expanded"); 
+        } 
+    }
+
     function switchTab(tabId, btn) { document.querySelectorAll('.section').forEach(s => s.style.display = 'none'); document.getElementById('tab-' + tabId).style.display = 'block'; document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(window.innerWidth <= 768) toggleMenu(); }
     function fecharModal(e) { if(!e || e.target.id === "modal" || e.target.className === "close-btn") { document.getElementById('modalContent').style.transform = "scale(0.9)"; setTimeout(() => document.getElementById('modal').style.display = "none", 200); } }
     function toggleTema() { document.body.classList.toggle("dark"); }
