@@ -120,8 +120,9 @@
                 padding-left: 15px; 
             }
 
-            .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1500; backdrop-filter: blur(3px); }
-            .overlay.active { display: block; }
+            /* --- MUDANÇA AQUI: opacity e visibility em vez de display none/block --- */
+            .overlay { visibility: hidden; opacity: 0; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1500; backdrop-filter: blur(3px); transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s; }
+            .overlay.active { visibility: visible; opacity: 1; }
         }
     </style>
 </head>
