@@ -118,9 +118,8 @@
                 padding-left: 15px; 
             }
 
-            /* AJUSTE DE SUAVIDADE NO FECHAMENTO */
             .overlay { 
-                display: block; /* Mantém no DOM para animar */
+                display: block; 
                 visibility: hidden; 
                 opacity: 0; 
                 position: fixed; 
@@ -180,6 +179,17 @@
                 <input id="uso" placeholder="Onde usar?" style="flex:1;">
             </div>
             
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                <label for="input-img" style="cursor:pointer; background:var(--input); padding:10px; border-radius:12px; font-size:14px; border:1px dashed var(--primary); flex:1; text-align:center; color: var(--text-alt);">
+                    📷 Anexar Imagem de Apoio
+                </label>
+                <input type="file" id="input-img" accept="image/*" style="display:none" onchange="previewImage(this)">
+                <div id="img-preview-container" style="display:none; position:relative;">
+                    <img id="img-preview" src="" style="height:45px; width:45px; object-fit:cover; border-radius:8px;">
+                    <span onclick="removeImg()" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border-radius:50%; width:18px; height:18px; font-size:12px; display:flex; align-items:center; justify-content:center; cursor:pointer;">×</span>
+                </div>
+            </div>
+
             <div class="editor-wrapper">
                 <div class="toolbar">
                     <button onclick="format('bold')">B</button>
@@ -236,6 +246,11 @@
 <div class="modal" id="modal" onclick="fecharModal(event)">
     <div class="modal-content" id="modalContent" onclick="event.stopPropagation()">
         <div class="close-btn" onclick="fecharModal()">×</div>
+        
+        <div id="display-img-modal" style="display:none; margin-bottom:15px; text-align:center;">
+            <img id="img-modal" src="" style="max-width:100%; border-radius:15px; max-height:200px; object-fit:contain; box-shadow: var(--shadow);">
+        </div>
+
         <div class="status-dots" id="modalDots" style="justify-content: center; margin-bottom: 25px; display: flex; gap: 8px;"></div>
         <input id="editTitulo" placeholder="Título">
         <select id="editCat"><option>Direitos Humanos</option><option>Educação</option><option>Tecnologia</option><option>Saúde</option><option>Meio Ambiente</option></select>
@@ -264,7 +279,7 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let dados = [], filtroAtual = "Todos", flashIndex = 0, indexAtual = null;
+    let dados = [], filtroAtual = "Todos", flashIndex = 0, indexAtual = null, imagemBase64 = "";
 
     function format(cmd, val) { document.execCommand(cmd, false, val); }
 
@@ -278,6 +293,25 @@
         document.getElementById('bannerPrincipal').style.background = cor;
         document.getElementById('btnSalvar').style.background = cor;
         document.getElementById('btnFlashNext').style.background = cor;
+    }
+
+    function previewImage(input) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagemBase64 = e.target.result;
+                document.getElementById('img-preview').src = imagemBase64;
+                document.getElementById('img-preview-container').style.display = "block";
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function removeImg() {
+        imagemBase64 = "";
+        document.getElementById('input-img').value = "";
+        document.getElementById('img-preview-container').style.display = "none";
     }
 
     auth.onAuthStateChanged(user => {
@@ -335,6 +369,15 @@
 
     function abrirModal(i) {
         indexAtual = i; const r = dados[i]; const cor = getCorEixo(r.categoria);
+        
+        const displayImg = document.getElementById('display-img-modal');
+        if(r.imagem) {
+            displayImg.style.display = "block";
+            document.getElementById('img-modal').src = r.imagem;
+        } else {
+            displayImg.style.display = "none";
+        }
+
         document.getElementById('modalContent').style.borderTopColor = cor;
         document.getElementById('btnConfirmar').style.background = cor;
         document.getElementById('editTitulo').value = r.titulo;
@@ -372,10 +415,11 @@
     async function salvar() {
         const t = document.getElementById("titulo"), d = document.getElementById("descricao"), u = document.getElementById("uso"), c = document.getElementById("categoria");
         if(!t.value || !d.innerHTML) return;
-        const n = { titulo: t.value, categoria: c.value, uso: u.value, descricao: d.innerHTML, status: "medio", createdAt: firebase.firestore.FieldValue.serverTimestamp(), userId: auth.currentUser?.uid || null };
+        const n = { titulo: t.value, categoria: c.value, uso: u.value, descricao: d.innerHTML, status: "medio", imagem: imagemBase64, createdAt: firebase.firestore.FieldValue.serverTimestamp(), userId: auth.currentUser?.uid || null };
         if (auth.currentUser) await db.collection("repertorios").add(n);
         else { n.createdAt = new Date(); dados.push(n); localStorage.setItem("reps", JSON.stringify(dados)); render(); }
         t.value = u.value = ""; d.innerHTML = "";
+        removeImg();
     }
 
     async function atualizar() {
