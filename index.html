@@ -212,10 +212,10 @@
         <div class="filter-bar">
             <span>Ordenar por:</span>
             <select id="sortOrder" onchange="render()">
+                <option value="eixo">Agrupar por Eixo</option>
                 <option value="data">Data (Recentes)</option>
                 <option value="nome">Nome (A-Z)</option>
                 <option value="relevancia">Relevância (Domínio)</option>
-                <option value="eixo">Agrupar por Eixo</option>
             </select>
         </div>
 
@@ -319,13 +319,25 @@
             document.getElementById("btnLogin").innerText = "Sair";
             document.getElementById("userName").innerText = `Olá, ${user.displayName.split(' ')[0]}!`;
             db.collection("repertorios").where("userId", "==", user.uid).onSnapshot(snap => {
-                dados = snap.docs.map(doc => ({ id: doc.id, createdAt: doc.data().createdAt?.toDate() || new Date(), ...doc.data() }));
+                dados = snap.docs.map(doc => {
+                    const data = doc.data();
+                    let dataCriacao;
+                    if (data.createdAt && data.createdAt.toDate) {
+                        dataCriacao = data.createdAt.toDate();
+                    } else if (data.createdAt) {
+                        dataCriacao = new Date(data.createdAt);
+                    } else {
+                        dataCriacao = new Date();
+                    }
+                    return { id: doc.id, ...data, createdAt: dataCriacao };
+                });
                 render();
             });
         } else {
             document.getElementById("btnLogin").innerText = "Login Google";
             document.getElementById("userName").innerText = "Offline";
-            dados = JSON.parse(localStorage.getItem("reps")) || [];
+            const localReps = JSON.parse(localStorage.getItem("reps")) || [];
+            dados = localReps.map(r => ({...r, createdAt: new Date(r.createdAt)}));
             render();
         }
     });
@@ -344,14 +356,16 @@
             return matchCategoria && textoBusca.includes(termoPesquisa);
         });
 
+        // Correção da Lógica de Ordenação
         if (order === "nome") exibicao.sort((a,b) => a.titulo.localeCompare(b.titulo));
         else if (order === "relevancia") { const peso = { "forte": 3, "medio": 2, "fraco": 1 }; exibicao.sort((a,b) => peso[b.status] - peso[a.status]); }
-        else if (order === "data") exibicao.sort((a,b) => b.createdAt - a.createdAt);
+        else if (order === "data") exibicao.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
         else if (order === "eixo") {
             ["Direitos Humanos", "Educação", "Tecnologia", "Saúde", "Meio Ambiente"].forEach(eixo => {
                 const itensEixo = exibicao.filter(i => i.categoria === eixo);
                 if (itensEixo.length > 0) {
                     lista.innerHTML += `<div class="group-title" style="color:${getCorEixo(eixo)}">${eixo}</div>`;
+                    itensEixo.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
                     itensEixo.forEach(r => lista.innerHTML += cardHTML(r));
                 }
             });
