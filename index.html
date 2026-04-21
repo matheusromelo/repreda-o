@@ -93,11 +93,10 @@
         .close-btn { position: absolute; top: 15px; right: 15px; width: 36px; height: 36px; background: var(--input); border-radius: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 20px; z-index: 11; }
         .btn-save { width: 100%; margin-top: 25px; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 18px; font-weight: 700; cursor: pointer; transition: background 0.3s; }
 
-        /* --- CORREÇÃO DO MENU MOBILE --- */
         @media (max-width: 768px) {
             .sidebar { 
                 position: fixed; 
-                left: -260px; /* Esconde totalmente */
+                left: -260px; 
                 height: 100vh; 
                 width: 260px !important; 
                 align-items: flex-start; 
@@ -106,7 +105,6 @@
             }
             .sidebar.active { left: 0; box-shadow: 15px 0 30px rgba(0,0,0,0.3); }
             
-            /* Força a exibição dos textos e alinhamento quando ativo no mobile */
             .sidebar.active .logo span, 
             .sidebar.active .menu button span:last-child { 
                 max-width: 200px; 
@@ -120,9 +118,22 @@
                 padding-left: 15px; 
             }
 
-            /* --- MUDANÇA AQUI: opacity e visibility em vez de display none/block --- */
-            .overlay { visibility: hidden; opacity: 0; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1500; backdrop-filter: blur(3px); transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s; }
-            .overlay.active { visibility: visible; opacity: 1; }
+            /* AJUSTE DE SUAVIDADE NO FECHAMENTO */
+            .overlay { 
+                display: block; /* Mantém no DOM para animar */
+                visibility: hidden; 
+                opacity: 0; 
+                position: fixed; 
+                inset: 0; 
+                background: rgba(0,0,0,0.5); 
+                z-index: 1500; 
+                backdrop-filter: blur(3px); 
+                transition: opacity 0.4s ease, visibility 0.4s ease; 
+            }
+            .overlay.active { 
+                visibility: visible; 
+                opacity: 1; 
+            }
         }
     </style>
 </head>
