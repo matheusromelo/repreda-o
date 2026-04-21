@@ -55,9 +55,17 @@
 
         input, textarea, select { width: 100%; margin-top: 10px; padding: 16px; border: none; border-radius: 16px; background: var(--input); color: var(--text); font-size: 16px; outline: none; }
         select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238e8e93' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
-        textarea { resize: none; overflow: hidden; }
+        
+        /* EDITOR DE TEXTO RICO ESTILIZADO */
+        .editor-wrapper { background: var(--input); border-radius: 18px; margin-top: 15px; overflow: hidden; border: 2px solid transparent; transition: 0.3s; }
+        .editor-wrapper:focus-within { border-color: var(--primary); background: var(--card); }
+        .toolbar { display: flex; gap: 8px; padding: 10px; background: rgba(0,0,0,0.03); border-bottom: 1px solid rgba(0,0,0,0.05); flex-wrap: wrap; }
+        .toolbar button { background: var(--card); border: 1px solid rgba(0,0,0,0.1); padding: 6px 12px; border-radius: 8px; cursor: pointer; color: var(--text); font-weight: bold; font-size: 13px; transition: 0.2s; }
+        .toolbar button:hover { background: var(--primary); color: white; }
+        .color-btn { width: 24px; height: 24px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.1); padding: 0 !important; }
+        .editor-content { padding: 16px; min-height: 120px; outline: none; color: var(--text); line-height: 1.6; font-size: 16px; overflow-y: auto; }
+        .editor-content:empty:before { content: attr(data-placeholder); opacity: 0.5; }
 
-        /* Barra de Pesquisa */
         .search-bar { position: relative; margin-bottom: 20px; }
         .search-bar input { padding-left: 45px; border: 2px solid transparent; transition: 0.3s; }
         .search-bar input:focus { border-color: var(--primary); background: var(--card); }
@@ -71,7 +79,6 @@
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card { background: var(--card); padding: 25px; border-radius: 24px; box-shadow: var(--shadow); transition: 0.3s ease; border: 1px solid rgba(0,0,0,0.02); cursor: pointer; border-left: 8px solid transparent; }
-        .status-dots { display: flex; gap: 8px; margin-bottom: 12px; }
         .dot { width: 12px; height: 12px; border-radius: 6px; opacity: 0.2; cursor: pointer; transition: 0.3s; }
         .dot.active { opacity: 1; transform: scale(1.2); }
         .red { background: #ff3b30; } .yellow { background: #ffcc00; } .green { background: #34c759; }
@@ -81,7 +88,6 @@
         .flash-card-inner.is-flipped { transform: rotateY(180deg); }
         .flash-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; border-radius: 30px; background: var(--card); border: 2px solid var(--primary); text-align: center; }
         .flash-back { transform: rotateY(180deg); background: var(--input); }
-        .flash-conteudo { margin-top: 15px; line-height: 1.4; font-size: 15px; }
 
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; padding: 20px; z-index: 1000; backdrop-filter: blur(10px); }
         .modal-content { background: var(--card); width: auto; min-width: 320px; max-width: 800px; max-height: 85vh; padding: 40px 30px; border-radius: 32px; position: relative; transform: scale(0.9); transition: 0.3s; overflow-y: auto; display: block; color: var(--text); box-shadow: 0 30px 60px rgba(0,0,0,0.2); border-top: 10px solid var(--primary); }
@@ -92,7 +98,6 @@
             .sidebar { position: fixed; left: -240px; height: 100vh; width: 240px !important; align-items: flex-start; padding: 20px 15px; }
             .sidebar.active { left: 0; box-shadow: 15px 0 30px rgba(0,0,0,0.2); }
             .sidebar.active .logo span, .sidebar.active .menu button span:last-child { max-width: 200px; opacity: 1; }
-            .sidebar.active .menu button { width: 100%; justify-content: flex-start; padding-left: 20px; }
             .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 90; }
             .overlay.active { display: block; }
         }
@@ -140,7 +145,19 @@
                 </select>
                 <input id="uso" placeholder="Onde usar?" style="flex:1;">
             </div>
-            <textarea id="descricao" placeholder="Explicação..." oninput="autoGrow(this)" style="height: 100px;"></textarea>
+            
+            <div class="editor-wrapper">
+                <div class="toolbar">
+                    <button onclick="format('bold')">B</button>
+                    <button onclick="format('italic')">I</button>
+                    <button class="color-btn" style="background:#ff3b30" onclick="format('foreColor','#ff3b30')"></button>
+                    <button class="color-btn" style="background:#007aff" onclick="format('foreColor','#007aff')"></button>
+                    <button class="color-btn" style="background:#34c759" onclick="format('foreColor','#34c759')"></button>
+                    <button onclick="format('removeFormat')">❌</button>
+                </div>
+                <div id="descricao" class="editor-content" contenteditable="true" data-placeholder="Sua explicação rica aqui..."></div>
+            </div>
+
             <button class="btn-save" id="btnSalvar" onclick="salvar()">Salvar</button>
         </div>
 
@@ -171,8 +188,7 @@
                 </div>
                 <div class="flash-face flash-back">
                     <span style="font-size: 12px; color:inherit; font-weight: bold;">Resposta</span>
-                    <p id="flashConteudo" class="flash-conteudo"></p>
-                    <p style="margin-top: 10px; font-size: 10px; opacity: 0.5;">Segure para ver tudo</p>
+                    <p id="flashConteudo" style="margin-top: 15px; line-height: 1.4; font-size: 15px;"></p>
                 </div>
             </div>
         </div>
@@ -186,11 +202,21 @@
 <div class="modal" id="modal" onclick="fecharModal(event)">
     <div class="modal-content" id="modalContent" onclick="event.stopPropagation()">
         <div class="close-btn" onclick="fecharModal()">×</div>
-        <div class="status-dots" id="modalDots" style="justify-content: center; margin-bottom: 25px;"></div>
+        <div class="status-dots" id="modalDots" style="justify-content: center; margin-bottom: 25px; display: flex; gap: 8px;"></div>
         <input id="editTitulo" placeholder="Título">
         <select id="editCat"><option>Direitos Humanos</option><option>Educação</option><option>Tecnologia</option><option>Saúde</option><option>Meio Ambiente</option></select>
         <input id="editUso" placeholder="Uso">
-        <textarea id="editDesc" oninput="autoGrow(this)" style="min-height: 120px;"></textarea>
+        
+        <div class="editor-wrapper">
+            <div class="toolbar">
+                <button onclick="format('bold')">B</button>
+                <button class="color-btn" style="background:#ff3b30" onclick="format('foreColor','#ff3b30')"></button>
+                <button class="color-btn" style="background:#007aff" onclick="format('foreColor','#007aff')"></button>
+                <button onclick="format('removeFormat')">❌</button>
+            </div>
+            <div id="editDesc" class="editor-content" contenteditable="true"></div>
+        </div>
+
         <div style="display: flex; gap: 10px;">
             <button class="btn-save" id="btnConfirmar" onclick="atualizar()" style="flex: 2;">Confirmar</button>
             <button id="btnDeletar" style="flex: 1; margin-top: 25px; border-radius: 18px; border:none; background: #ff3b301a; color:#ff3b30; cursor:pointer; font-size: 20px;">🗑️</button>
@@ -206,6 +232,9 @@
 
     let dados = [], filtroAtual = "Todos", flashIndex = 0, indexAtual = null, holdTimer;
 
+    // NOVO: Função de formatação
+    function format(cmd, val) { document.execCommand(cmd, false, val); }
+
     function getCorEixo(cat) {
         const cores = { "Direitos Humanos": "var(--cor-direitos)", "Educação": "var(--cor-educacao)", "Tecnologia": "var(--cor-tecnologia)", "Saúde": "var(--cor-saude)", "Meio Ambiente": "var(--cor-meio-ambiente)" };
         return cores[cat] || "var(--primary)";
@@ -217,8 +246,6 @@
         document.getElementById('btnSalvar').style.background = cor;
         document.getElementById('btnFlashNext').style.background = cor;
     }
-
-    function autoGrow(el) { el.style.height = "5px"; el.style.height = (el.scrollHeight) + "px"; }
 
     auth.onAuthStateChanged(user => {
         if (user) {
@@ -244,13 +271,11 @@
         const termoPesquisa = document.getElementById("inputPesquisa").value.toLowerCase();
         lista.innerHTML = "";
         
-        // Filtro de Categoria E Filtro de Pesquisa
         let exibicao = dados.filter(r => {
             const matchCategoria = filtroAtual === "Todos" || r.categoria === filtroAtual;
-            const matchPesquisa = r.titulo.toLowerCase().includes(termoPesquisa) || 
-                                  r.descricao.toLowerCase().includes(termoPesquisa) || 
-                                  (r.uso && r.uso.toLowerCase().includes(termoPesquisa));
-            return matchCategoria && matchPesquisa;
+            // Busca considerando texto puro sem as tags de cor do editor
+            const textoBusca = (r.titulo + (r.uso||'') + r.descricao.replace(/<[^>]*>/g, '')).toLowerCase();
+            return matchCategoria && textoBusca.includes(termoPesquisa);
         });
 
         if (order === "nome") exibicao.sort((a,b) => a.titulo.localeCompare(b.titulo));
@@ -273,7 +298,7 @@
     function cardHTML(r) {
         const i = dados.indexOf(r);
         const cor = getCorEixo(r.categoria);
-        return `<div class="card" style="border-left-color: ${cor}" onclick="abrirModal(${i})"><div class="status-dots"><div class="dot red ${r.status==='fraco'?'active':''}" onclick="updateStatus(event, ${i}, 'fraco')"></div><div class="dot yellow ${r.status==='medio'?'active':''}" onclick="updateStatus(event, ${i}, 'medio')"></div><div class="dot green ${r.status==='forte'?'active':''}" onclick="updateStatus(event, ${i}, 'forte')"></div></div><h3>${r.titulo}</h3><p style="color:${cor}; font-size:13px; font-weight:bold; margin-top:5px;">${r.uso || 'Geral'}</p></div>`;
+        return `<div class="card" style="border-left-color: ${cor}" onclick="abrirModal(${i})"><div class="status-dots" style="display: flex; gap: 8px; margin-bottom: 12px;"><div class="dot red ${r.status==='fraco'?'active':''}" onclick="updateStatus(event, ${i}, 'fraco')"></div><div class="dot yellow ${r.status==='medio'?'active':''}" onclick="updateStatus(event, ${i}, 'medio')"></div><div class="dot green ${r.status==='forte'?'active':''}" onclick="updateStatus(event, ${i}, 'forte')"></div></div><h3>${r.titulo}</h3><p style="color:${cor}; font-size:13px; font-weight:bold; margin-top:5px;">${r.uso || 'Geral'}</p></div>`;
     }
 
     function abrirModal(i) {
@@ -282,12 +307,12 @@
         document.getElementById('btnConfirmar').style.background = cor;
         document.getElementById('editTitulo').value = r.titulo;
         document.getElementById('editUso').value = r.uso || "";
-        document.getElementById('editDesc').value = r.descricao;
+        document.getElementById('editDesc').innerHTML = r.descricao; // Renderiza o HTML com as cores
         document.getElementById('editCat').value = r.categoria || "Direitos Humanos";
         document.getElementById('modalDots').innerHTML = `<div class="dot red ${r.status==='fraco'?'active':''}" onclick="updateStatusModal('fraco')"></div><div class="dot yellow ${r.status==='medio'?'active':''}" onclick="updateStatusModal('medio')"></div><div class="dot green ${r.status==='forte'?'active':''}" onclick="updateStatusModal('forte')"></div>`;
         document.getElementById('btnDeletar').onclick = () => deletar(i);
         document.getElementById('modal').style.display = "flex";
-        setTimeout(() => { document.getElementById('modalContent').style.transform = "scale(1)"; autoGrow(document.getElementById('editDesc')); }, 10);
+        setTimeout(() => { document.getElementById('modalContent').style.transform = "scale(1)"; }, 10);
     }
 
     function updateFlashUI() { 
@@ -295,31 +320,14 @@
             if(flashIndex >= dados.length) flashIndex = 0; 
             const r = dados[flashIndex]; const cor = getCorEixo(r.categoria);
             document.getElementById('flashTitulo').innerText = r.titulo; 
-            const palavras = r.descricao.split(/\s+/);
-            const textoLimitado = palavras.length > 20 ? palavras.slice(0, 20).join(" ") + "..." : r.descricao;
-            document.getElementById('flashConteudo').innerText = textoLimitado; 
+            // Mostra o texto puro no flashcard para não quebrar o layout
+            document.getElementById('flashConteudo').innerText = r.descricao.replace(/<[^>]*>/g, '').substring(0, 150) + "..."; 
             document.getElementById('faceFrente').style.borderColor = cor;
             document.getElementById('faceFrente').style.color = cor;
         } 
     }
 
     function toggleFlashFlip() { document.getElementById('flashInner').classList.toggle('is-flipped'); }
-
-    const flashInner = document.getElementById('flashInner');
-    const startHold = () => {
-        holdTimer = setTimeout(() => {
-            if (flashInner.classList.contains('is-flipped')) {
-                abrirModal(flashIndex);
-            }
-        }, 600);
-    };
-    const cancelHold = () => clearTimeout(holdTimer);
-
-    flashInner.addEventListener('mousedown', startHold);
-    flashInner.addEventListener('touchstart', startHold);
-    flashInner.addEventListener('mouseup', cancelHold);
-    flashInner.addEventListener('mouseleave', cancelHold);
-    flashInner.addEventListener('touchend', cancelHold);
 
     function nextFlash() { document.getElementById('flashInner').classList.remove('is-flipped'); setTimeout(() => { flashIndex = (flashIndex + 1) % dados.length; updateFlashUI(); }, 200); }
     function prevFlash() { document.getElementById('flashInner').classList.remove('is-flipped'); setTimeout(() => { flashIndex = (flashIndex - 1 + dados.length) % dados.length; updateFlashUI(); }, 200); }
@@ -330,20 +338,23 @@
         else { dados.splice(i, 1); localStorage.setItem("reps", JSON.stringify(dados)); render(); }
         fecharModal();
     }
+
     async function salvar() {
         const t = document.getElementById("titulo"), d = document.getElementById("descricao"), u = document.getElementById("uso"), c = document.getElementById("categoria");
-        if(!t.value || !d.value) return;
-        const n = { titulo: t.value, categoria: c.value, uso: u.value, descricao: d.value, status: "medio", createdAt: firebase.firestore.FieldValue.serverTimestamp(), userId: auth.currentUser?.uid || null };
+        if(!t.value || !d.innerHTML) return;
+        const n = { titulo: t.value, categoria: c.value, uso: u.value, descricao: d.innerHTML, status: "medio", createdAt: firebase.firestore.FieldValue.serverTimestamp(), userId: auth.currentUser?.uid || null };
         if (auth.currentUser) await db.collection("repertorios").add(n);
         else { n.createdAt = new Date(); dados.push(n); localStorage.setItem("reps", JSON.stringify(dados)); render(); }
-        t.value = u.value = d.value = "";
+        t.value = u.value = ""; d.innerHTML = "";
     }
+
     async function atualizar() {
-        const i = indexAtual, t = document.getElementById('editTitulo').value, u = document.getElementById('editUso').value, d = document.getElementById('editDesc').value, c = document.getElementById('editCat').value;
+        const i = indexAtual, t = document.getElementById('editTitulo').value, u = document.getElementById('editUso').value, d = document.getElementById('editDesc').innerHTML, c = document.getElementById('editCat').value;
         if (auth.currentUser && dados[i].id) await db.collection("repertorios").doc(dados[i].id).update({ titulo: t, uso: u, descricao: d, categoria: c });
         else { Object.assign(dados[i], {titulo:t, uso:u, descricao:d, categoria:c}); localStorage.setItem("reps", JSON.stringify(dados)); render(); }
         fecharModal();
     }
+
     function toggleMenu() { const s = document.getElementById("sidebar"), o = document.getElementById("overlay"); if (window.innerWidth <= 768) { s.classList.toggle("active"); o.classList.toggle("active"); } else { s.classList.toggle("expanded"); } }
     function switchTab(tabId, btn) { document.querySelectorAll('.section').forEach(s => s.style.display = 'none'); document.getElementById('tab-' + tabId).style.display = 'block'; document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(window.innerWidth <= 768) toggleMenu(); }
     function fecharModal(e) { if(!e || e.target.id === "modal" || e.target.className === "close-btn") { document.getElementById('modalContent').style.transform = "scale(0.9)"; setTimeout(() => document.getElementById('modal').style.display = "none", 200); } }
