@@ -25,9 +25,33 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { display: flex; min-height: 100vh; background: var(--bg); color: var(--text); transition: background 0.3s; }
+        
+        /* Ajuste para o menu acompanhar o scroll no Desktop */
+        body { 
+            display: flex; 
+            align-items: flex-start; /* Alinha ao topo para o sticky funcionar */
+            min-height: 100vh; 
+            background: var(--bg); 
+            color: var(--text); 
+            transition: background 0.3s; 
+        }
 
-        .sidebar { width: 80px; background: var(--sidebar); padding: 20px 0; transition: var(--transition); display: flex; flex-direction: column; z-index: 1000; align-items: center; overflow-x: hidden; }
+        /* Sidebar com efeito Sticky */
+        .sidebar { 
+            width: 80px; 
+            background: var(--sidebar); 
+            padding: 20px 0; 
+            transition: var(--transition); 
+            display: flex; 
+            flex-direction: column; 
+            z-index: 1000; 
+            align-items: center; 
+            overflow-x: hidden;
+            position: sticky; /* Acompanha o scroll */
+            top: 0; 
+            height: 100vh; 
+        }
+        
         .sidebar.expanded { width: 240px; align-items: flex-start; padding: 20px 15px; }
 
         .logo { height: 60px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 800; margin-bottom: 20px; width: 100%; font-size: 28px; }
@@ -102,6 +126,7 @@
                 align-items: flex-start; 
                 padding: 20px 15px; 
                 z-index: 2000;
+                top: 0;
             }
             .sidebar.active { left: 0; box-shadow: 15px 0 30px rgba(0,0,0,0.3); }
             
