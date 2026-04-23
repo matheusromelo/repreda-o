@@ -159,6 +159,58 @@
                 opacity: 1; 
             }
         }
+
+        /* === ANIMAÇÕES GERAIS === */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.card {
+    animation: fadeUp 0.4s ease;
+}
+
+/* Hover mais vivo */
+.card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+/* Botões com feedback */
+button:active {
+    transform: scale(0.96);
+}
+
+/* Modal mais suave */
+.modal-content {
+    opacity: 0;
+}
+
+.modal[style*="flex"] .modal-content {
+    animation: modalPop 0.35s ease forwards;
+}
+
+@keyframes modalPop {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Flashcard flip mais fluido */
+.flash-card-inner {
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
     </style>
 </head>
 <body>
