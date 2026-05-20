@@ -1102,14 +1102,44 @@ input:focus, textarea:focus, select:focus{
     }
 
     function toggleMenu() { 
-        const s = document.getElementById("sidebar"), o = document.getElementById("overlay"); 
-        if (window.innerWidth <= 768) { 
-            s.classList.toggle("active"); 
-            o.classList.toggle("active"); 
-        } else { 
-            s.classList.toggle("expanded"); 
-        } 
+    const s = document.getElementById("sidebar"),
+          o = document.getElementById("overlay"); 
+
+    if (window.innerWidth <= 768) { 
+        s.classList.toggle("active"); 
+        o.classList.toggle("active"); 
+    } else { 
+        s.classList.toggle("expanded"); 
+    } 
+}
+
+/* =========================
+   CLICK NO MENU ABRE TUDO
+========================= */
+document.getElementById("sidebar").addEventListener("click", function(e){
+
+    // impede abrir/recolher ao clicar nos botões
+    if(e.target.closest("button")) return;
+
+    // mobile
+    if(window.innerWidth <= 768){
+
+        this.classList.toggle("active");
+
+        document
+            .getElementById("overlay")
+            .classList.toggle("active");
+
     }
+
+    // desktop
+    else{
+
+        this.classList.toggle("expanded");
+
+    }
+
+});
 
     function switchTab(tabId, btn) { document.querySelectorAll('.section').forEach(s => s.style.display = 'none'); document.getElementById('tab-' + tabId).style.display = 'block'; document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(window.innerWidth <= 768) toggleMenu(); }
     function fecharModal(e) { if(!e || e.target.id === "modal" || e.target.className === "close-btn") { document.getElementById('modalContent').style.transform = "scale(0.9)"; setTimeout(() => document.getElementById('modal').style.display = "none", 200); } }
