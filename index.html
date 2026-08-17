@@ -97,6 +97,9 @@
         .filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 0 5px; }
         .filter-bar span { font-size: 14px; font-weight: 600; color: var(--text-alt); }
         .filter-bar select { margin-top: 0; padding: 8px 30px 8px 15px; font-size: 14px; width: auto; border-radius: 10px; }
+        .total-repertorios { display: flex; align-items: baseline; gap: 5px; margin: -4px 0 14px; color: var(--text-alt); font-size: 12px; font-weight: 600; letter-spacing: 0.01em; }
+        .total-repertorios::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--primary); opacity: 0.75; }
+        .total-repertorios strong { color: var(--text); font-size: 13px; }
 
         .group-title { grid-column: 1 / -1; margin: 15px 0 5px 5px; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-alt); }
 
@@ -456,10 +459,6 @@ input:focus, textarea:focus, select:focus{
         inset 0 1px 0 rgba(255,255,255,0.15);
 }
 
-.flash-card-inner:hover{
-    transform:scale(1.02);
-}
-
 .modal{
     background:rgba(0,0,0,0.55);
 }
@@ -594,10 +593,6 @@ input:focus, textarea:focus, select:focus{
 .flash-face p,
 .flash-face span{
     transform: translateZ(30px);
-}
-
-.flash-scene:hover .flash-card-inner{
-    transform: rotateY(-6deg) rotateX(3deg);
 }
 
 .flash-card-inner.is-flipped{
@@ -837,6 +832,11 @@ input:focus, textarea:focus, select:focus{
             <input type="text" id="inputPesquisa" placeholder="Pesquisar repertórios..." oninput="render()">
         </div>
 
+        <div class="total-repertorios" aria-live="polite">
+            <span id="rotuloTotalRepertorios">Total</span>
+            <strong id="totalRepertorios">0 repertórios</strong>
+        </div>
+
         <div class="filter-bar">
             <span>Ordenar por:</span>
             <select id="sortOrder" onchange="render()">
@@ -1005,6 +1005,13 @@ input:focus, textarea:focus, select:focus{
         const lista = document.getElementById("lista");
         const order = document.getElementById("sortOrder").value;
         const termoPesquisa = document.getElementById("inputPesquisa").value.toLowerCase();
+        const quantidadeNoEixo = filtroAtual === "Todos"
+            ? dados.length
+            : dados.filter(r => r.categoria === filtroAtual).length;
+        const rotuloTotal = document.getElementById("rotuloTotalRepertorios");
+        const totalRepertorios = document.getElementById("totalRepertorios");
+        rotuloTotal.textContent = filtroAtual === "Todos" ? "Total" : filtroAtual;
+        totalRepertorios.textContent = `${quantidadeNoEixo} ${quantidadeNoEixo === 1 ? "repertório" : "repertórios"}`;
         lista.innerHTML = "";
         
         let exibicao = dados.filter(r => {
