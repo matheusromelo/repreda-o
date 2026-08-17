@@ -816,23 +816,7 @@ input:focus, textarea:focus, select:focus{
 .redacao-page:empty::before { content: attr(data-placeholder); color: #a59d97; pointer-events: none; }
 .dark .redacao-page { background: #252329; color: #f4f0ec; box-shadow: 0 22px 55px rgba(0,0,0,0.45); }
 .dark .redacao-page:empty::before { color: #918a85; }
-.mapa-mental { position: sticky; top: 20px; flex: 0 0 270px; padding: 14px; border: 1px solid rgba(123,44,255,0.18); border-radius: 18px; background: color-mix(in srgb, var(--card) 92%, var(--primary)); box-shadow: var(--shadow); }
-.mapa-mental-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
-.mapa-mental-header h3 { font-size: 13px; }
-.mapa-mental-header button { padding: 7px 9px; border: none; border-radius: 9px; background: var(--primary); color: white; font-size: 11px; font-weight: 800; cursor: pointer; }
-.mapa-mental p { margin-bottom: 10px; color: var(--text-alt); font-size: 11px; line-height: 1.4; }
-.mapa-canvas { position: relative; height: 440px; overflow: hidden; border-radius: 13px; background-image: radial-gradient(circle, rgba(123,44,255,0.28) 1px, transparent 1px); background-size: 14px 14px; border: 1px solid rgba(123,44,255,0.12); }
-.mapa-linhas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.mapa-node { position: absolute; width: 132px; min-height: 60px; padding: 10px 28px 10px 11px; border: 1px solid rgba(123,44,255,0.22); border-radius: 12px; background: var(--card); box-shadow: 0 8px 18px rgba(0,0,0,0.10); color: var(--text); font-size: 12px; line-height: 1.35; cursor: grab; user-select: none; }
-.mapa-node:active { cursor: grabbing; }
-.mapa-node [contenteditable] { outline: none; user-select: text; cursor: text; }
-.mapa-handle { position: absolute; right: 7px; top: 21px; width: 17px; height: 17px; padding: 0; border: none; border-radius: 50%; background: var(--primary); color: white; cursor: crosshair; font-size: 11px; line-height: 17px; }
-.mapa-remover { position: absolute; top: 3px; right: 5px; border: none; background: transparent; color: var(--text-alt); cursor: pointer; font-size: 14px; line-height: 1; }
-.mapa-vazio { display: grid; height: 100%; place-items: center; padding: 20px; color: var(--text-alt); font-size: 12px; text-align: center; }
-.redacao-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; color: var(--text-alt); font-size: 12px; }
-.btn-voltar-redacoes { padding: 9px 0; border: none; background: transparent; color: var(--text-alt); cursor: pointer; font-weight: 700; }
-.btn-voltar-redacoes:hover { color: var(--primary); }
-@media (max-width: 860px) { .redacao-stage { flex-direction: column; } .redacao-page { width: 100%; margin: 0 auto; } .mapa-mental { position: static; width: 100%; flex-basis: auto; } }
+@media (max-width: 860px) { .redacao-stage { flex-direction: column; } .redacao-page { width: 100%; margin: 0 auto; } }
 @media (max-width: 600px) { .grade-summary { grid-template-columns: 1fr; } .redacao-library-header { align-items: flex-start; flex-direction: column; } .redacao-topbar { align-items: stretch; flex-direction: column; } .redacao-details { grid-template-columns: 1fr 1fr; } .redacao-details select { grid-column: 1 / -1; } .zoom-control { margin-left: 0; } .redacao-stage { min-height: 720px; padding: 14px 0; } .redacao-page { min-height: 900px; padding: 42px 28px; font-size: 16px; } }
 
 
@@ -1038,17 +1022,6 @@ input:focus, textarea:focus, select:focus{
             </div>
             <div class="redacao-stage">
                 <article id="redacaoEditor" class="redacao-page" contenteditable="true" spellcheck="true" data-placeholder="Comece sua redação aqui..." oninput="atualizarRedacao()"></article>
-                <aside class="mapa-mental" aria-label="Mapa mental da redação">
-                    <div class="mapa-mental-header">
-                        <h3>Mapa mental</h3>
-                        <button type="button" onclick="adicionarNoMapa()">+ Nota</button>
-                    </div>
-                    <p>Arraste as notas. Puxe a bolinha de uma nota até outra para criar uma seta.</p>
-                    <div class="mapa-canvas" id="mapaCanvas">
-                        <svg class="mapa-linhas" id="mapaLinhas" aria-hidden="true"></svg>
-                        <div id="mapaNodes"></div>
-                    </div>
-                </aside>
             </div>
             <textarea id="redacaoNotas" class="redacao-notas" placeholder="Anotações, comentários da correção ou pontos para revisar..." oninput="atualizarRedacao()"></textarea>
             <div class="redacao-footer">
@@ -1109,7 +1082,7 @@ input:focus, textarea:focus, select:focus{
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let dados = [], filtroAtual = "Todos", apenasFavoritos = false, flashIndex = 0, indexAtual = null, imagemBase64 = "", imagemEditBase64 = "", flashDeck = [], modoRevisao = false, redacoes = [], redacaoAtualId = null, mapaMental = { nodes: [], edges: [] };
+    let dados = [], filtroAtual = "Todos", apenasFavoritos = false, flashIndex = 0, indexAtual = null, imagemBase64 = "", imagemEditBase64 = "", flashDeck = [], modoRevisao = false, redacoes = [], redacaoAtualId = null;
 
     function format(cmd, val) { document.execCommand(cmd, false, val); }
 
@@ -1167,8 +1140,6 @@ input:focus, textarea:focus, select:focus{
         document.getElementById('redacaoNotas').value = '';
         document.getElementById('modoSemCorrecao').checked = false;
         aplicarModoCorrecao(false);
-        mapaMental = { nodes: [], edges: [] };
-        renderizarMapaMental();
         atualizarRedacao(false);
         document.getElementById('redacaoSalvamento').textContent = 'Ainda não salva';
         document.getElementById('bibliotecaRedacoes').style.display = 'none';
@@ -1188,8 +1159,6 @@ input:focus, textarea:focus, select:focus{
         document.getElementById('redacaoNotas').value = redacao.notas || '';
         document.getElementById('modoSemCorrecao').checked = Boolean(redacao.semCorrecao);
         aplicarModoCorrecao(Boolean(redacao.semCorrecao));
-        mapaMental = redacao.mapaMental ? JSON.parse(JSON.stringify(redacao.mapaMental)) : { nodes: [], edges: [] };
-        renderizarMapaMental();
         atualizarRedacao(false);
         document.getElementById('redacaoSalvamento').textContent = `Salva em ${new Date(redacao.atualizadaEm).toLocaleDateString('pt-BR')}`;
         document.getElementById('bibliotecaRedacoes').style.display = 'none';
@@ -1207,8 +1176,7 @@ input:focus, textarea:focus, select:focus{
             nota: valorNota === '' ? null : Number(valorNota),
             valorMaximo: valorMaximo === '' ? null : Number(valorMaximo),
             notas: document.getElementById('redacaoNotas').value,
-            semCorrecao: document.getElementById('modoSemCorrecao').checked,
-            mapaMental: JSON.parse(JSON.stringify(mapaMental))
+            semCorrecao: document.getElementById('modoSemCorrecao').checked
         };
         if (redacaoAtualId) {
             const indice = redacoes.findIndex(item => item.id === redacaoAtualId);
@@ -1249,108 +1217,6 @@ input:focus, textarea:focus, select:focus{
         return String(texto).replace(/[&<>"']/g, caractere => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[caractere]);
     }
 
-    function adicionarNoMapa() {
-        const indice = mapaMental.nodes.length;
-        mapaMental.nodes.push({ id: `nota-${Date.now()}-${indice}`, texto: 'Nova ideia', x: 16 + (indice * 17) % 105, y: 18 + (indice * 47) % 300 });
-        renderizarMapaMental();
-        atualizarRedacao();
-    }
-
-    function renderizarMapaMental() {
-        const area = document.getElementById('mapaNodes');
-        if (!area) return;
-        if (!mapaMental.nodes.length) {
-            area.innerHTML = '<div class="mapa-vazio">Adicione notas para organizar teses, argumentos e repertórios.</div>';
-        } else {
-            area.innerHTML = mapaMental.nodes.map(nota => `<div class="mapa-node" data-id="${nota.id}" style="left:${nota.x}px; top:${nota.y}px;" onpointerdown="iniciarArrastoMapa(event, '${nota.id}')"><div contenteditable="true" onpointerdown="event.stopPropagation()" oninput="editarNoMapa('${nota.id}', this.innerText)">${escaparHtml(nota.texto)}</div><button class="mapa-remover" type="button" title="Remover nota" onpointerdown="event.stopPropagation()" onclick="removerNoMapa('${nota.id}')">×</button><button class="mapa-handle" type="button" title="Arraste para criar uma seta" onpointerdown="iniciarConexaoMapa(event, '${nota.id}')">↗</button></div>`).join('');
-        }
-        requestAnimationFrame(() => atualizarLinhasMapa());
-    }
-
-    function editarNoMapa(id, texto) {
-        const nota = mapaMental.nodes.find(item => item.id === id);
-        if (nota) nota.texto = texto;
-        atualizarRedacao();
-    }
-
-    function removerNoMapa(id) {
-        mapaMental.nodes = mapaMental.nodes.filter(item => item.id !== id);
-        mapaMental.edges = mapaMental.edges.filter(linha => linha.de !== id && linha.para !== id);
-        renderizarMapaMental();
-        atualizarRedacao();
-    }
-
-    function iniciarArrastoMapa(event, id) {
-        if (event.target.closest('[contenteditable], button')) return;
-        event.preventDefault();
-        const nota = mapaMental.nodes.find(item => item.id === id);
-        if (!nota) return;
-        const area = document.getElementById('mapaCanvas').getBoundingClientRect();
-        window.mapaInteracao = { tipo: 'arrasto', id, offsetX: event.clientX - area.left - nota.x, offsetY: event.clientY - area.top - nota.y };
-        document.addEventListener('pointermove', moverInteracaoMapa);
-        document.addEventListener('pointerup', finalizarInteracaoMapa, { once: true });
-    }
-
-    function iniciarConexaoMapa(event, id) {
-        event.preventDefault();
-        event.stopPropagation();
-        window.mapaInteracao = { tipo: 'conexao', origem: id };
-        document.addEventListener('pointermove', moverInteracaoMapa);
-        document.addEventListener('pointerup', finalizarInteracaoMapa, { once: true });
-    }
-
-    function moverInteracaoMapa(event) {
-        if (!window.mapaInteracao) return;
-        const area = document.getElementById('mapaCanvas').getBoundingClientRect();
-        if (window.mapaInteracao.tipo === 'arrasto') {
-            const nota = mapaMental.nodes.find(item => item.id === window.mapaInteracao.id);
-            if (!nota) return;
-            nota.x = Math.max(0, Math.min(area.width - 132, event.clientX - area.left - window.mapaInteracao.offsetX));
-            nota.y = Math.max(0, Math.min(area.height - 60, event.clientY - area.top - window.mapaInteracao.offsetY));
-            const elemento = document.querySelector(`.mapa-node[data-id="${nota.id}"]`);
-            if (elemento) { elemento.style.left = `${nota.x}px`; elemento.style.top = `${nota.y}px`; }
-            atualizarLinhasMapa();
-        } else {
-            atualizarLinhasMapa({ x: event.clientX - area.left, y: event.clientY - area.top });
-        }
-    }
-
-    function finalizarInteracaoMapa(event) {
-        document.removeEventListener('pointermove', moverInteracaoMapa);
-        if (window.mapaInteracao?.tipo === 'conexao') {
-            const destino = event.target.closest?.('.mapa-node')?.dataset.id;
-            const origem = window.mapaInteracao.origem;
-            if (destino && destino !== origem && !mapaMental.edges.some(linha => linha.de === origem && linha.para === destino)) {
-                mapaMental.edges.push({ de: origem, para: destino });
-                atualizarRedacao();
-            }
-        }
-        window.mapaInteracao = null;
-        atualizarLinhasMapa();
-    }
-
-    function atualizarLinhasMapa(linhaTemporaria = null) {
-        const area = document.getElementById('mapaCanvas');
-        const svg = document.getElementById('mapaLinhas');
-        if (!area || !svg) return;
-        const largura = area.clientWidth;
-        const altura = area.clientHeight;
-        svg.setAttribute('viewBox', `0 0 ${largura} ${altura}`);
-        const porId = Object.fromEntries(mapaMental.nodes.map(nota => [nota.id, nota]));
-        const centro = nota => ({ x: nota.x + 66, y: nota.y + 30 });
-        const linhas = mapaMental.edges.map(linha => {
-            const inicio = porId[linha.de], fim = porId[linha.para];
-            if (!inicio || !fim) return '';
-            const a = centro(inicio), b = centro(fim);
-            return `<path d="M ${a.x} ${a.y} L ${b.x} ${b.y}" stroke="var(--primary)" stroke-width="2" fill="none" marker-end="url(#setaMapa)"/>`;
-        }).join('');
-        let temporaria = '';
-        if (linhaTemporaria && window.mapaInteracao?.origem) {
-            const inicio = porId[window.mapaInteracao.origem];
-            if (inicio) { const a = centro(inicio); temporaria = `<path d="M ${a.x} ${a.y} L ${linhaTemporaria.x} ${linhaTemporaria.y}" stroke="var(--primary)" stroke-width="2" stroke-dasharray="4 4" fill="none"/>`; }
-        }
-        svg.innerHTML = `<defs><marker id="setaMapa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="var(--primary)"/></marker></defs>${linhas}${temporaria}`;
-    }
 
     function renderizarEstatisticasNotas() {
         const destino = document.getElementById('estatisticasNotas');
