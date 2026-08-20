@@ -823,24 +823,30 @@ input:focus, textarea:focus, select:focus{
 .redacao-comments-toggle { color: var(--text-alt) !important; }
 .redacao-comments-toggle.has-comments { color: var(--primary) !important; border-color: color-mix(in srgb, var(--primary) 28%, var(--input)) !important; }
 .redacao-stage { position: relative; display: flex; align-items: flex-start; gap: 22px; min-height: 1120px; padding: 34px 0; background: transparent; }
-.redacao-page { flex: 1; width: 650px; min-height: 1000px; margin: 0; padding: 76px 64px; transform-origin: top center; background: #fffdf9; color: #292523; box-shadow: 0 22px 55px rgba(20,15,10,0.20); font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.8; outline: none; transition: transform 0.2s; }
+.redacao-page { flex: 1; width: 650px; min-height: 1000px; margin: 0; padding: 76px 64px; transform-origin: top center; background: #fffdf9; color: #292523; box-shadow: 0 22px 55px rgba(20,15,10,0.20); font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.8; outline: none; transition: transform 0.2s; position: sticky; top: 18px; }
 .redacao-page:empty::before { content: attr(data-placeholder); color: #a59d97; pointer-events: none; }
 .dark .redacao-page { background: #252329; color: #f4f0ec; box-shadow: 0 22px 55px rgba(0,0,0,0.45); }
 .dark .redacao-page:empty::before { color: #918a85; }
 .redacao-comment-marker { position: relative; padding: 0 2px; border-bottom: 2px solid var(--comentario-cor, #7b2cff); background: color-mix(in srgb, var(--comentario-cor, #7b2cff) 12%, transparent); border-radius: 3px; cursor: pointer; }
 .redacao-comment-marker::after { content: '➜'; display: inline-block; margin-left: 3px; color: var(--comentario-cor, #7b2cff); font-family: system-ui, sans-serif; font-size: .72em; font-weight: 900; line-height: 1; transform: translateY(-1px); }
 .redacao-comments { position: absolute; z-index: 20; top: 34px; left: calc(100% + 18px); display: none; width: 235px; height: calc(100% - 68px); padding-left: 24px; pointer-events: none; }
+.redacao-comments.on-left { left: auto; right: calc(100% + 18px); padding-left: 0; padding-right: 24px; }
 .redacao-comments.is-open { display: block; animation: comentariosEntrar .22s ease both; }
 @keyframes comentariosEntrar { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: translateX(0); } }
 .redacao-comments-empty { padding: 15px; border: 1px dashed color-mix(in srgb, var(--primary) 35%, transparent); border-radius: 14px; color: var(--text-alt); font-size: 12px; line-height: 1.45; text-align: center; }
 .redacao-comment-card { --comentario-cor: #7b2cff; position: absolute; left: 24px; width: calc(100% - 24px); padding: 13px 30px 13px 14px; border: 1px solid color-mix(in srgb, var(--comentario-cor) 25%, transparent); border-radius: 14px; background: var(--card); box-shadow: 0 8px 22px rgba(20, 10, 50, .08); color: var(--text); cursor: pointer; font-size: 12px; line-height: 1.45; pointer-events: auto; transition: transform .2s, box-shadow .2s; }
 .redacao-comment-card::before { content: '⟵'; position: absolute; left: -21px; top: 15px; color: var(--comentario-cor); font-size: 22px; font-weight: 900; }
+.redacao-comments.on-left .redacao-comment-card { left: 0; }
+.redacao-comments.on-left .redacao-comment-card::before { content: '⟶'; left: auto; right: -21px; }
 .redacao-comment-card:hover { transform: translateX(3px); box-shadow: 0 12px 26px rgba(20, 10, 50, .14); }
 .redacao-comment-card strong { display: block; margin-bottom: 4px; color: var(--comentario-cor); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.redacao-comment-text { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+.redacao-comment-card.is-expanded { max-height: min(45vh, 330px); overflow-y: auto; }
+.redacao-comment-card.is-expanded .redacao-comment-text { display: block; overflow: visible; }
 .redacao-comment-delete { position: absolute; top: 6px; right: 7px; border: none; background: transparent; color: var(--text-alt); cursor: pointer; font-size: 15px; }
-@media (max-width: 1180px) { .redacao-comments { left: auto; right: 12px; top: 52px; position: fixed; width: 245px; height: calc(100vh - 82px); overflow-y: auto; padding: 8px 8px 12px 24px; } .redacao-comment-card { position: relative; left: 0; top: auto !important; width: 100%; margin-bottom: 11px; } }
+@media (max-width: 1180px) { .redacao-comments { left: auto; right: 12px; top: 52px; position: fixed; width: 245px; height: calc(100vh - 82px); overflow-y: auto; padding: 8px 8px 12px 24px; } .redacao-comments.on-left { left: 104px; right: auto; padding: 8px 24px 12px 8px; } .redacao-comment-card { position: relative; left: 0; top: auto !important; width: 100%; margin-bottom: 11px; } .redacao-comments.on-left .redacao-comment-card::before { content: '⟶'; left: auto; right: -21px; } }
 @media (max-width: 860px) { .redacao-page { width: 100%; margin: 0 auto; } }
-@media (max-width: 600px) { .grade-summary { grid-template-columns: 1fr; } .redacao-hero { align-items: flex-start; flex-direction: column; padding: 24px; } .redacao-library-header { align-items: flex-start; flex-direction: column; } .redacao-topbar { align-items: stretch; flex-direction: column; } .redacao-details { grid-template-columns: 1fr 1fr; } .redacao-details select { grid-column: 1 / -1; } .zoom-control { margin-left: 0; } .redacao-stage { align-items: center; min-height: 0; padding: 20px 0 28px; overflow-x: auto; } .redacao-page { flex: none; width: 100%; min-height: calc((100vw - 50px) * 1.414); padding: 38px 28px; font-size: 15px; } .redacao-comments { top: 84px; right: 12px; width: min(310px, calc(100vw - 24px)); height: calc(100vh - 104px); padding: 6px 4px 12px; } .redacao-comment-card::before { display: none; } }
+@media (max-width: 600px) { .grade-summary { grid-template-columns: 1fr; } .redacao-hero { align-items: flex-start; flex-direction: column; padding: 24px; } .redacao-library-header { align-items: flex-start; flex-direction: column; } .redacao-topbar { align-items: stretch; flex-direction: column; } .redacao-details { grid-template-columns: 1fr 1fr; } .redacao-details select { grid-column: 1 / -1; } .zoom-control { margin-left: 0; } .redacao-stage { align-items: center; min-height: 0; padding: 20px 0 28px; overflow-x: auto; } .redacao-page { flex: none; width: 100%; min-height: calc((100vw - 50px) * 1.414); padding: 38px 28px; font-size: 15px; position: relative; top: auto; } .redacao-comments { top: 84px; right: 12px; width: min(310px, calc(100vw - 24px)); height: calc(100vh - 104px); padding: 6px 4px 12px; } .redacao-comments.on-left { left: 12px; right: auto; padding: 6px 4px 12px; } .redacao-comment-card::before { display: none; } }
 
 
 </style>
@@ -1042,15 +1048,20 @@ input:focus, textarea:focus, select:focus{
                 </div>
                 <button type="button" title="Título" onmousedown="event.preventDefault()" onclick="formatarRedacao('formatBlock', 'h2')">H2</button>
                 <button type="button" title="Lista" onmousedown="event.preventDefault()" onclick="formatarRedacao('insertUnorderedList')">• Lista</button>
+                <div class="highlight-picker" title="Cor do comentário">
+                    <input id="corComentario" type="color" value="#7b2cff" aria-label="Cor do comentário">
+                </div>
                 <button class="redacao-comment-action" type="button" title="Adicionar comentário à seleção" onmousedown="event.preventDefault()" onclick="adicionarComentarioRedacao()">↗ Comentário</button>
                 <button id="btnComentariosRedacao" class="redacao-comments-toggle" type="button" title="Mostrar comentários" aria-expanded="false" onclick="alternarComentariosRedacao()">☰ Comentários</button>
+                <button id="btnLadoComentarios" class="redacao-comments-toggle" type="button" title="Mover comentários para o outro lado" onclick="alternarLadoComentarios()">↔ Lado</button>
                 <span class="toolbar-divider"></span>
                 <button type="button" title="Alinhar à esquerda" onmousedown="event.preventDefault()" onclick="formatarRedacao('justifyLeft')">≡</button>
                 <button type="button" title="Centralizar" onmousedown="event.preventDefault()" onclick="formatarRedacao('justifyCenter')">≣</button>
                 <div class="zoom-control">
                     <button type="button" title="Diminuir zoom" onclick="alterarZoomRedacao(-10)">−</button>
-                    <input id="zoomRedacao" type="range" min="70" max="130" value="100" aria-label="Zoom do documento" oninput="definirZoomRedacao(this.value)">
+                    <input id="zoomRedacao" type="range" min="50" max="160" value="100" aria-label="Zoom do documento" oninput="definirZoomRedacao(this.value)">
                     <button type="button" title="Aumentar zoom" onclick="alterarZoomRedacao(10)">+</button>
+                    <button type="button" title="Ajustar folha à tela" onclick="ajustarZoomRedacao()">Ajustar</button>
                     <span id="zoomRedacaoValor">100%</span>
                 </div>
             </div>
@@ -1152,6 +1163,15 @@ input:focus, textarea:focus, select:focus{
         if (aberto) requestAnimationFrame(posicionarComentariosRedacao);
     }
 
+    function alternarLadoComentarios() {
+        const painel = document.getElementById('redacaoComentarios');
+        const botao = document.getElementById('btnLadoComentarios');
+        if (!painel || !botao) return;
+        const esquerda = painel.classList.toggle('on-left');
+        botao.textContent = esquerda ? '← Esquerda' : '→ Direita';
+        requestAnimationFrame(posicionarComentariosRedacao);
+    }
+
     function posicionarComentariosRedacao() {
         if (!window.matchMedia('(min-width: 1181px)').matches) return;
         const palco = document.querySelector('.redacao-stage');
@@ -1179,9 +1199,19 @@ input:focus, textarea:focus, select:focus{
             alternarComentariosRedacao(false);
             return;
         }
-        painel.innerHTML = comentarios.map((comentario, indice) => `<article class="redacao-comment-card" data-comment-id="${comentario.id}" style="--comentario-cor:${comentario.cor || '#7b2cff'}" onclick="focarComentarioRedacao('${comentario.id}')"><button class="redacao-comment-delete" type="button" title="Remover comentário" onclick="removerComentarioRedacao(event, '${comentario.id}')">×</button><strong>Comentário ${indice + 1}</strong>${escaparHtml(comentario.texto || '')}</article>`).join('');
+        painel.innerHTML = comentarios.map((comentario, indice) => `<article class="redacao-comment-card" data-comment-id="${comentario.id}" style="--comentario-cor:${comentario.cor || '#7b2cff'}" onclick="expandirComentarioRedacao('${comentario.id}')"><button class="redacao-comment-delete" type="button" title="Remover comentário" onclick="removerComentarioRedacao(event, '${comentario.id}')">×</button><strong>Comentário ${indice + 1}</strong><span class="redacao-comment-text">${escaparHtml(comentario.texto || '')}</span></article>`).join('');
         if (!painel.classList.contains('is-open')) alternarComentariosRedacao(false);
         else requestAnimationFrame(posicionarComentariosRedacao);
+    }
+
+    function expandirComentarioRedacao(id) {
+        const painel = document.getElementById('redacaoComentarios');
+        const cartao = painel?.querySelector(`.redacao-comment-card[data-comment-id="${id}"]`);
+        if (!cartao) return;
+        const seraExpandido = !cartao.classList.contains('is-expanded');
+        painel.querySelectorAll('.redacao-comment-card.is-expanded').forEach(item => item.classList.remove('is-expanded'));
+        cartao.classList.toggle('is-expanded', seraExpandido);
+        requestAnimationFrame(posicionarComentariosRedacao);
     }
 
     function adicionarComentarioRedacao() {
@@ -1194,12 +1224,11 @@ input:focus, textarea:focus, select:focus{
         if (!texto || !texto.trim()) return;
 
         const id = `comentario-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-        const cores = ['#7b2cff', '#0984e3', '#e84393', '#27ae60', '#e67e22'];
         const marcador = document.createElement('span');
         marcador.className = 'redacao-comment-marker';
         marcador.dataset.commentId = id;
         marcador.dataset.commentText = texto.trim();
-        marcador.style.setProperty('--comentario-cor', cores[obterComentariosRedacao().length % cores.length]);
+        marcador.style.setProperty('--comentario-cor', document.getElementById('corComentario').value || '#7b2cff');
         marcador.tabIndex = 0;
         marcador.title = 'Ver comentário vinculado';
         marcador.setAttribute('onclick', `focarComentarioRedacao('${id}')`);
@@ -1426,17 +1455,30 @@ input:focus, textarea:focus, select:focus{
     }
 
     function definirZoomRedacao(valor) {
-        const zoom = Number(valor);
+        const zoom = Math.min(160, Math.max(50, Number(valor)));
+        const controle = document.getElementById('zoomRedacao');
+        controle.value = zoom;
         document.getElementById('redacaoEditor').style.zoom = zoom / 100;
         document.getElementById('redacaoEditor').style.transform = 'none';
         document.getElementById('zoomRedacaoValor').textContent = `${zoom}%`;
+        requestAnimationFrame(posicionarComentariosRedacao);
     }
 
     function alterarZoomRedacao(delta) {
         const controle = document.getElementById('zoomRedacao');
-        const novoValor = Math.min(130, Math.max(70, Number(controle.value) + delta));
-        controle.value = novoValor;
-        definirZoomRedacao(novoValor);
+        definirZoomRedacao(Number(controle.value) + delta);
+    }
+
+    function ajustarZoomRedacao() {
+        const editor = document.getElementById('redacaoEditor');
+        const palco = document.querySelector('.redacao-stage');
+        if (!editor || !palco) return;
+        const zoomAnterior = editor.style.zoom;
+        editor.style.zoom = 1;
+        const larguraFolha = editor.getBoundingClientRect().width;
+        const larguraDisponivel = palco.clientWidth - 8;
+        editor.style.zoom = zoomAnterior;
+        definirZoomRedacao(Math.round((larguraDisponivel / larguraFolha) * 100));
     }
 
 
