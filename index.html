@@ -810,8 +810,7 @@ input:focus, textarea:focus, select:focus{
 .redacao-details input, .redacao-details select { margin: 0; padding: 11px 13px; border-radius: 12px; font-size: 14px; }
 .spellcheck-toggle { display: inline-flex; align-items: center; gap: 8px; color: var(--text-alt); font-size: 12px; font-weight: 700; cursor: pointer; }
 .spellcheck-toggle input { width: auto; margin: 0; accent-color: var(--primary); }
-.redacao-notas { width: 100%; min-height: 86px; margin: 14px 0 0; padding: 13px; border: 1px solid var(--input); border-radius: 12px; background: var(--card); color: var(--text); font-size: 14px; line-height: 1.5; resize: vertical; }
-.redacao-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; padding: 10px; margin-bottom: 16px; border: 1px solid rgba(123,44,255,0.13); border-radius: 16px; background: color-mix(in srgb, var(--card) 88%, transparent); }
+.redacao-toolbar { position: sticky; top: 10px; z-index: 110; display: flex; flex-wrap: wrap; align-items: center; gap: 7px; padding: 10px; margin-bottom: 16px; border: 1px solid rgba(123,44,255,0.20); border-radius: 16px; background: color-mix(in srgb, var(--card) 92%, transparent); box-shadow: 0 12px 30px rgba(35, 18, 74, .14); backdrop-filter: blur(14px); }
 .redacao-toolbar button, .zoom-control button { min-width: 32px; height: 32px; padding: 0 9px; border: 1px solid var(--input); border-radius: 9px; background: var(--card); color: var(--text); cursor: pointer; font-size: 13px; font-weight: 700; transition: 0.2s; }
 .redacao-toolbar button:hover, .zoom-control button:hover { color: white; background: var(--primary); border-color: var(--primary); }
 .toolbar-divider { width: 1px; height: 22px; margin: 0 2px; background: var(--input); }
@@ -823,7 +822,10 @@ input:focus, textarea:focus, select:focus{
 .redacao-comments-toggle { color: var(--text-alt) !important; }
 .redacao-comments-toggle.has-comments { color: var(--primary) !important; border-color: color-mix(in srgb, var(--primary) 28%, var(--input)) !important; }
 .redacao-stage { position: relative; display: flex; align-items: flex-start; gap: 22px; min-height: 1120px; padding: 34px 0; background: transparent; }
-.redacao-page { flex: 1; width: 650px; min-height: 1000px; margin: 0; padding: 76px 64px; transform-origin: top center; background: #fffdf9; color: #292523; box-shadow: 0 22px 55px rgba(20,15,10,0.20); font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.8; outline: none; transition: transform 0.2s; position: sticky; top: 18px; }
+.redacao-page { flex: 1; width: 650px; min-height: 1000px; margin: 0; padding: 76px 64px; transform-origin: top center; background: #fffdf9; color: #292523; box-shadow: 0 22px 55px rgba(20,15,10,0.20); font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.8; outline: none; transition: transform 0.2s; position: sticky; top: 98px; }
+.redacao-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 22px; padding: 16px 18px; border: 1px solid color-mix(in srgb, var(--primary) 15%, var(--input)); border-radius: 18px; background: color-mix(in srgb, var(--card) 92%, transparent); box-shadow: var(--shadow); }
+.redacao-footer-actions { display: flex; align-items: center; gap: 14px; }
+.btn-voltar-redacoes { padding: 10px 13px; border: 1px solid var(--input); border-radius: 11px; background: var(--input); color: var(--text); font-weight: 700; cursor: pointer; }
 .redacao-page:empty::before { content: attr(data-placeholder); color: #a59d97; pointer-events: none; }
 .dark .redacao-page { background: #252329; color: #f4f0ec; box-shadow: 0 22px 55px rgba(0,0,0,0.45); }
 .dark .redacao-page:empty::before { color: #918a85; }
@@ -846,7 +848,7 @@ input:focus, textarea:focus, select:focus{
 .redacao-comment-delete { position: absolute; top: 6px; right: 7px; border: none; background: transparent; color: var(--text-alt); cursor: pointer; font-size: 15px; }
 @media (max-width: 1180px) { .redacao-comments { left: auto; right: 12px; top: 52px; position: fixed; width: 245px; height: calc(100vh - 82px); overflow-y: auto; padding: 8px 8px 12px 24px; } .redacao-comments.on-left { left: 104px; right: auto; padding: 8px 24px 12px 8px; } .redacao-comment-card { position: relative; left: 0; top: auto !important; width: 100%; margin-bottom: 11px; } .redacao-comments.on-left .redacao-comment-card::before { content: '⟶'; left: auto; right: -21px; } }
 @media (max-width: 860px) { .redacao-page { width: 100%; margin: 0 auto; } }
-@media (max-width: 600px) { .grade-summary { grid-template-columns: 1fr; } .redacao-hero { align-items: flex-start; flex-direction: column; padding: 24px; } .redacao-library-header { align-items: flex-start; flex-direction: column; } .redacao-topbar { align-items: stretch; flex-direction: column; } .redacao-details { grid-template-columns: 1fr 1fr; } .redacao-details select { grid-column: 1 / -1; } .zoom-control { margin-left: 0; } .redacao-stage { align-items: center; min-height: 0; padding: 20px 0 28px; overflow-x: auto; } .redacao-page { flex: none; width: 100%; min-height: calc((100vw - 50px) * 1.414); padding: 38px 28px; font-size: 15px; position: relative; top: auto; } .redacao-comments { top: 84px; right: 12px; width: min(310px, calc(100vw - 24px)); height: calc(100vh - 104px); padding: 6px 4px 12px; } .redacao-comments.on-left { left: 12px; right: auto; padding: 6px 4px 12px; } .redacao-comment-card::before { display: none; } }
+@media (max-width: 600px) { .grade-summary { grid-template-columns: 1fr; } .redacao-hero { align-items: flex-start; flex-direction: column; padding: 24px; } .redacao-library-header { align-items: flex-start; flex-direction: column; } .redacao-topbar { align-items: stretch; flex-direction: column; } .redacao-details { grid-template-columns: 1fr 1fr; } .redacao-details select { grid-column: 1 / -1; } .redacao-toolbar { top: 6px; } .zoom-control { margin-left: 0; } .redacao-stage { align-items: center; min-height: 0; padding: 20px 0 28px; overflow-x: auto; } .redacao-page { flex: none; width: 100%; min-height: calc((100vw - 50px) * 1.414); padding: 38px 28px; font-size: 15px; position: relative; top: auto; } .redacao-footer { align-items: stretch; flex-direction: column; } .redacao-footer-actions { justify-content: space-between; flex-wrap: wrap; } .redacao-comments { top: 84px; right: 12px; width: min(310px, calc(100vw - 24px)); height: calc(100vh - 104px); padding: 6px 4px 12px; } .redacao-comments.on-left { left: 12px; right: auto; padding: 6px 4px 12px; } .redacao-comment-card::before { display: none; } }
 
 
 </style>
@@ -1059,7 +1061,7 @@ input:focus, textarea:focus, select:focus{
                 <button type="button" title="Centralizar" onmousedown="event.preventDefault()" onclick="formatarRedacao('justifyCenter')">≣</button>
                 <div class="zoom-control">
                     <button type="button" title="Diminuir zoom" onclick="alterarZoomRedacao(-10)">−</button>
-                    <input id="zoomRedacao" type="range" min="50" max="160" value="100" aria-label="Zoom do documento" oninput="definirZoomRedacao(this.value)">
+                    <input id="zoomRedacao" type="range" min="100" max="200" value="100" aria-label="Aproximar o texto" oninput="definirZoomRedacao(this.value)">
                     <button type="button" title="Aumentar zoom" onclick="alterarZoomRedacao(10)">+</button>
                     <button type="button" title="Ajustar folha à tela" onclick="ajustarZoomRedacao()">Ajustar</button>
                     <span id="zoomRedacaoValor">100%</span>
@@ -1069,10 +1071,9 @@ input:focus, textarea:focus, select:focus{
                 <article id="redacaoEditor" class="redacao-page" contenteditable="true" spellcheck="true" data-placeholder="Comece sua redação aqui..." oninput="atualizarRedacao()"></article>
                 <aside id="redacaoComentarios" class="redacao-comments" aria-label="Comentários vinculados à redação"></aside>
             </div>
-            <textarea id="redacaoNotas" class="redacao-notas" placeholder="Anotações, comentários da correção ou pontos para revisar..." oninput="atualizarRedacao()"></textarea>
             <div class="redacao-footer">
                 <button class="btn-voltar-redacoes" type="button" onclick="mostrarBibliotecaRedacoes()">← Voltar para redações</button>
-                <div style="display:flex; align-items:center; gap:14px;">
+                <div class="redacao-footer-actions">
                     <label class="spellcheck-toggle"><input id="modoSemCorrecao" type="checkbox" onchange="alternarCorrecaoCaracteres()"> Sem correção de caracteres</label>
                     <span id="redacaoSalvamento">Ainda não salva</span>
                     <button class="btn-salvar-redacao" type="button" onclick="salvarRedacao()">Salvar redação</button>
@@ -1339,7 +1340,6 @@ input:focus, textarea:focus, select:focus{
         document.getElementById('redacaoBanca').value = '';
         document.getElementById('redacaoNota').value = '';
         document.getElementById('redacaoValorMaximo').value = '1000';
-        document.getElementById('redacaoNotas').value = '';
         document.getElementById('modoSemCorrecao').checked = false;
         aplicarModoCorrecao(false);
         renderizarComentariosRedacao();
@@ -1359,7 +1359,6 @@ input:focus, textarea:focus, select:focus{
         document.getElementById('redacaoBanca').value = redacao.banca || '';
         document.getElementById('redacaoNota').value = redacao.nota ?? '';
         document.getElementById('redacaoValorMaximo').value = redacao.valorMaximo ?? '1000';
-        document.getElementById('redacaoNotas').value = redacao.notas || '';
         document.getElementById('modoSemCorrecao').checked = Boolean(redacao.semCorrecao);
         aplicarModoCorrecao(Boolean(redacao.semCorrecao));
         renderizarComentariosRedacao();
@@ -1381,7 +1380,6 @@ input:focus, textarea:focus, select:focus{
             banca: document.getElementById('redacaoBanca').value,
             nota: valorNota === '' ? null : Number(valorNota),
             valorMaximo: valorMaximo === '' ? null : Number(valorMaximo),
-            notas: document.getElementById('redacaoNotas').value,
             semCorrecao: document.getElementById('modoSemCorrecao').checked
         };
         const dadosRedacao = { titulo, conteudo, ...detalhes, comentarios: obterComentariosRedacao(), atualizadaEm: agora, userId: auth.currentUser.uid };
@@ -1455,7 +1453,7 @@ input:focus, textarea:focus, select:focus{
     }
 
     function definirZoomRedacao(valor) {
-        const zoom = Math.min(160, Math.max(50, Number(valor)));
+        const zoom = Math.min(200, Math.max(100, Number(valor)));
         const controle = document.getElementById('zoomRedacao');
         controle.value = zoom;
         document.getElementById('redacaoEditor').style.zoom = zoom / 100;
@@ -1478,7 +1476,7 @@ input:focus, textarea:focus, select:focus{
         const larguraFolha = editor.getBoundingClientRect().width;
         const larguraDisponivel = palco.clientWidth - 8;
         editor.style.zoom = zoomAnterior;
-        definirZoomRedacao(Math.round((larguraDisponivel / larguraFolha) * 100));
+        definirZoomRedacao(Math.max(100, Math.round((larguraDisponivel / larguraFolha) * 100)));
     }
 
 
