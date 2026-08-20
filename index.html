@@ -779,14 +779,6 @@ input:focus, textarea:focus, select:focus{
 
 /* ===== EDITOR DE REDAÇÕES ===== */
 .redacao-library { max-width: 860px; margin: 0 auto; }
-.redacao-hero { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 28px; margin-bottom: 22px; border-radius: 24px; color: white; background: linear-gradient(120deg, #4c1d95, #7b2cff 55%, #c084fc); box-shadow: 0 18px 38px rgba(123,44,255,0.26); }
-.redacao-hero::after { content: '✦'; position: absolute; right: 28px; top: -22px; font-size: 120px; opacity: .14; line-height: 1; }
-.redacao-hero-copy { position: relative; z-index: 1; }
-.redacao-hero-copy span { display: inline-block; margin-bottom: 8px; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; opacity: .82; }
-.redacao-hero h1 { font-size: 27px; letter-spacing: -.04em; }
-.redacao-hero p { margin-top: 7px; max-width: 500px; font-size: 14px; line-height: 1.45; opacity: .88; }
-.redacao-cloud-status { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid rgba(255,255,255,.25); border-radius: 12px; background: rgba(255,255,255,.13); font-size: 12px; font-weight: 800; white-space: nowrap; }
-.redacao-cloud-status::before { content: '☁'; font-size: 18px; }
 .redacao-library-header { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-bottom: 26px; }
 .redacao-library-header h2 { font-size: 28px; letter-spacing: -0.04em; }
 .redacao-library-header p { color: var(--text-alt); margin-top: 5px; font-size: 14px; }
@@ -810,7 +802,8 @@ input:focus, textarea:focus, select:focus{
 .redacao-details input, .redacao-details select { margin: 0; padding: 11px 13px; border-radius: 12px; font-size: 14px; }
 .spellcheck-toggle { display: inline-flex; align-items: center; gap: 8px; color: var(--text-alt); font-size: 12px; font-weight: 700; cursor: pointer; }
 .spellcheck-toggle input { width: auto; margin: 0; accent-color: var(--primary); }
-.redacao-toolbar { position: sticky; top: 10px; z-index: 110; display: flex; flex-wrap: wrap; align-items: center; gap: 7px; padding: 10px; margin-bottom: 16px; border: 1px solid rgba(123,44,255,0.20); border-radius: 16px; background: color-mix(in srgb, var(--card) 92%, transparent); box-shadow: 0 12px 30px rgba(35, 18, 74, .14); backdrop-filter: blur(14px); }
+.redacao-notas { width: 100%; min-height: 86px; margin: 14px 0 0; padding: 13px; border: 1px solid var(--input); border-radius: 12px; background: var(--card); color: var(--text); font-size: 14px; line-height: 1.5; resize: vertical; }
+.redacao-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; padding: 10px; margin-bottom: 16px; border: 1px solid rgba(123,44,255,0.13); border-radius: 16px; background: color-mix(in srgb, var(--card) 88%, transparent); }
 .redacao-toolbar button, .zoom-control button { min-width: 32px; height: 32px; padding: 0 9px; border: 1px solid var(--input); border-radius: 9px; background: var(--card); color: var(--text); cursor: pointer; font-size: 13px; font-weight: 700; transition: 0.2s; }
 .redacao-toolbar button:hover, .zoom-control button:hover { color: white; background: var(--primary); border-color: var(--primary); }
 .toolbar-divider { width: 1px; height: 22px; margin: 0 2px; background: var(--input); }
@@ -818,37 +811,13 @@ input:focus, textarea:focus, select:focus{
 .zoom-control input { width: 90px; margin: 0; padding: 0; accent-color: var(--primary); box-shadow: none; }
 .highlight-picker { display: inline-flex; align-items: center; gap: 5px; padding: 4px 7px; border: 1px solid var(--input); border-radius: 9px; background: var(--card); }
 .highlight-picker input { width: 24px; height: 24px; margin: 0; padding: 0; border: none; background: none; cursor: pointer; }
-.redacao-comment-action { display: inline-flex; align-items: center; gap: 5px; color: var(--primary) !important; border-color: color-mix(in srgb, var(--primary) 28%, var(--input)) !important; }
-.redacao-comments-toggle { color: var(--text-alt) !important; }
-.redacao-comments-toggle.has-comments { color: var(--primary) !important; border-color: color-mix(in srgb, var(--primary) 28%, var(--input)) !important; }
-.redacao-stage { position: relative; display: flex; align-items: flex-start; gap: 22px; min-height: 1120px; padding: 34px 0; background: transparent; }
-.redacao-page { flex: 1; width: 650px; min-height: 1000px; margin: 0; padding: 76px 64px; transform-origin: top center; background: #fffdf9; color: #292523; box-shadow: 0 22px 55px rgba(20,15,10,0.20); font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.8; outline: none; transition: transform 0.2s; position: sticky; top: 98px; }
-.redacao-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 22px; padding: 16px 18px; border: 1px solid color-mix(in srgb, var(--primary) 15%, var(--input)); border-radius: 18px; background: color-mix(in srgb, var(--card) 92%, transparent); box-shadow: var(--shadow); }
-.redacao-footer-actions { display: flex; align-items: center; gap: 14px; }
-.btn-voltar-redacoes { padding: 10px 13px; border: 1px solid var(--input); border-radius: 11px; background: var(--input); color: var(--text); font-weight: 700; cursor: pointer; }
+.redacao-stage { display: flex; align-items: flex-start; gap: 22px; min-height: 1120px; padding: 34px 0; background: transparent; }
+.redacao-page { flex: 1; width: 650px; min-height: 1000px; margin: 0; padding: 76px 64px; transform-origin: top center; background: #fffdf9; color: #292523; box-shadow: 0 22px 55px rgba(20,15,10,0.20); font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.8; outline: none; transition: transform 0.2s; }
 .redacao-page:empty::before { content: attr(data-placeholder); color: #a59d97; pointer-events: none; }
 .dark .redacao-page { background: #252329; color: #f4f0ec; box-shadow: 0 22px 55px rgba(0,0,0,0.45); }
 .dark .redacao-page:empty::before { color: #918a85; }
-.redacao-comment-marker { position: relative; padding: 0 2px; border-bottom: 2px solid var(--comentario-cor, #7b2cff); background: color-mix(in srgb, var(--comentario-cor, #7b2cff) 12%, transparent); border-radius: 3px; cursor: pointer; }
-.redacao-comment-marker::after { content: '➜'; display: inline-block; margin-left: 3px; color: var(--comentario-cor, #7b2cff); font-family: system-ui, sans-serif; font-size: .72em; font-weight: 900; line-height: 1; transform: translateY(-1px); }
-.redacao-comments { position: absolute; z-index: 20; top: 34px; left: calc(100% + 18px); display: none; width: 235px; height: calc(100% - 68px); padding-left: 24px; pointer-events: none; }
-.redacao-comments.on-left { left: auto; right: calc(100% + 18px); padding-left: 0; padding-right: 24px; }
-.redacao-comments.is-open { display: block; animation: comentariosEntrar .22s ease both; }
-@keyframes comentariosEntrar { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: translateX(0); } }
-.redacao-comments-empty { padding: 15px; border: 1px dashed color-mix(in srgb, var(--primary) 35%, transparent); border-radius: 14px; color: var(--text-alt); font-size: 12px; line-height: 1.45; text-align: center; }
-.redacao-comment-card { --comentario-cor: #7b2cff; position: absolute; left: 24px; width: calc(100% - 24px); padding: 13px 30px 13px 14px; border: 1px solid color-mix(in srgb, var(--comentario-cor) 25%, transparent); border-radius: 14px; background: var(--card); box-shadow: 0 8px 22px rgba(20, 10, 50, .08); color: var(--text); cursor: pointer; font-size: 12px; line-height: 1.45; pointer-events: auto; transition: transform .2s, box-shadow .2s; }
-.redacao-comment-card::before { content: '⟵'; position: absolute; left: -21px; top: 15px; color: var(--comentario-cor); font-size: 22px; font-weight: 900; }
-.redacao-comments.on-left .redacao-comment-card { left: 0; }
-.redacao-comments.on-left .redacao-comment-card::before { content: '⟶'; left: auto; right: -21px; }
-.redacao-comment-card:hover { transform: translateX(3px); box-shadow: 0 12px 26px rgba(20, 10, 50, .14); }
-.redacao-comment-card strong { display: block; margin-bottom: 4px; color: var(--comentario-cor); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
-.redacao-comment-text { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
-.redacao-comment-card.is-expanded { max-height: min(45vh, 330px); overflow-y: auto; }
-.redacao-comment-card.is-expanded .redacao-comment-text { display: block; overflow: visible; }
-.redacao-comment-delete { position: absolute; top: 6px; right: 7px; border: none; background: transparent; color: var(--text-alt); cursor: pointer; font-size: 15px; }
-@media (max-width: 1180px) { .redacao-comments { left: auto; right: 12px; top: 52px; position: fixed; width: 245px; height: calc(100vh - 82px); overflow-y: auto; padding: 8px 8px 12px 24px; } .redacao-comments.on-left { left: 104px; right: auto; padding: 8px 24px 12px 8px; } .redacao-comment-card { position: relative; left: 0; top: auto !important; width: 100%; margin-bottom: 11px; } .redacao-comments.on-left .redacao-comment-card::before { content: '⟶'; left: auto; right: -21px; } }
-@media (max-width: 860px) { .redacao-page { width: 100%; margin: 0 auto; } }
-@media (max-width: 600px) { .grade-summary { grid-template-columns: 1fr; } .redacao-hero { align-items: flex-start; flex-direction: column; padding: 24px; } .redacao-library-header { align-items: flex-start; flex-direction: column; } .redacao-topbar { align-items: stretch; flex-direction: column; } .redacao-details { grid-template-columns: 1fr 1fr; } .redacao-details select { grid-column: 1 / -1; } .redacao-toolbar { top: 6px; } .zoom-control { margin-left: 0; } .redacao-stage { align-items: center; min-height: 0; padding: 20px 0 28px; overflow-x: auto; } .redacao-page { flex: none; width: 100%; min-height: calc((100vw - 50px) * 1.414); padding: 38px 28px; font-size: 15px; position: relative; top: auto; } .redacao-footer { align-items: stretch; flex-direction: column; } .redacao-footer-actions { justify-content: space-between; flex-wrap: wrap; } .redacao-comments { top: 84px; right: 12px; width: min(310px, calc(100vw - 24px)); height: calc(100vh - 104px); padding: 6px 4px 12px; } .redacao-comments.on-left { left: 12px; right: auto; padding: 6px 4px 12px; } .redacao-comment-card::before { display: none; } }
+@media (max-width: 860px) { .redacao-stage { flex-direction: column; } .redacao-page { width: 100%; margin: 0 auto; } }
+@media (max-width: 600px) { .grade-summary { grid-template-columns: 1fr; } .redacao-library-header { align-items: flex-start; flex-direction: column; } .redacao-topbar { align-items: stretch; flex-direction: column; } .redacao-details { grid-template-columns: 1fr 1fr; } .redacao-details select { grid-column: 1 / -1; } .zoom-control { margin-left: 0; } .redacao-stage { min-height: 720px; padding: 14px 0; } .redacao-page { min-height: 900px; padding: 42px 28px; font-size: 16px; } }
 
 
 </style>
@@ -998,18 +967,10 @@ input:focus, textarea:focus, select:focus{
 
     <div id="tab-redacoes" class="section" style="display:none;">
         <div class="redacao-library" id="bibliotecaRedacoes">
-            <section class="redacao-hero" aria-label="Seu espaço de redações">
-                <div class="redacao-hero-copy">
-                    <span>Redação Pro</span>
-                    <h1>Escreva, acompanhe e evolua.</h1>
-                    <p>Suas redações são sincronizadas com segurança na nuvem e ficam disponíveis em qualquer dispositivo conectado.</p>
-                </div>
-                <div class="redacao-cloud-status" id="redacaoCloudStatus">Conecte-se para sincronizar</div>
-            </section>
             <div class="redacao-library-header">
                 <div>
                     <h2>Minhas redações</h2>
-                    <p>Seu histórico salvo na nuvem.</p>
+                    <p>Seus textos ficam salvos neste dispositivo.</p>
                 </div>
                 <button class="btn-nova-redacao" type="button" onclick="abrirNovaRedacao()">+ Nova redação</button>
             </div>
@@ -1032,7 +993,6 @@ input:focus, textarea:focus, select:focus{
                     <option value="UNESP">UNESP</option>
                     <option value="FUVEST">FUVEST</option>
                     <option value="UNICAMP">UNICAMP</option>
-                    <option value="ITA">ITA</option>
                 </select>
                 <input id="redacaoNota" type="number" min="0" step="0.1" placeholder="Sua nota" oninput="atualizarRedacao()">
                 <input id="redacaoValorMaximo" type="number" min="1" step="0.1" value="1000" placeholder="Valor máximo" oninput="atualizarRedacao()">
@@ -1050,30 +1010,23 @@ input:focus, textarea:focus, select:focus{
                 </div>
                 <button type="button" title="Título" onmousedown="event.preventDefault()" onclick="formatarRedacao('formatBlock', 'h2')">H2</button>
                 <button type="button" title="Lista" onmousedown="event.preventDefault()" onclick="formatarRedacao('insertUnorderedList')">• Lista</button>
-                <div class="highlight-picker" title="Cor do comentário">
-                    <input id="corComentario" type="color" value="#7b2cff" aria-label="Cor do comentário">
-                </div>
-                <button class="redacao-comment-action" type="button" title="Adicionar comentário à seleção" onmousedown="event.preventDefault()" onclick="adicionarComentarioRedacao()">↗ Comentário</button>
-                <button id="btnComentariosRedacao" class="redacao-comments-toggle" type="button" title="Mostrar comentários" aria-expanded="false" onclick="alternarComentariosRedacao()">☰ Comentários</button>
-                <button id="btnLadoComentarios" class="redacao-comments-toggle" type="button" title="Mover comentários para o outro lado" onclick="alternarLadoComentarios()">↔ Lado</button>
                 <span class="toolbar-divider"></span>
                 <button type="button" title="Alinhar à esquerda" onmousedown="event.preventDefault()" onclick="formatarRedacao('justifyLeft')">≡</button>
                 <button type="button" title="Centralizar" onmousedown="event.preventDefault()" onclick="formatarRedacao('justifyCenter')">≣</button>
                 <div class="zoom-control">
                     <button type="button" title="Diminuir zoom" onclick="alterarZoomRedacao(-10)">−</button>
-                    <input id="zoomRedacao" type="range" min="100" max="200" value="100" aria-label="Aproximar o texto" oninput="definirZoomRedacao(this.value)">
+                    <input id="zoomRedacao" type="range" min="70" max="130" value="100" aria-label="Zoom do documento" oninput="definirZoomRedacao(this.value)">
                     <button type="button" title="Aumentar zoom" onclick="alterarZoomRedacao(10)">+</button>
-                    <button type="button" title="Ajustar folha à tela" onclick="ajustarZoomRedacao()">Ajustar</button>
                     <span id="zoomRedacaoValor">100%</span>
                 </div>
             </div>
             <div class="redacao-stage">
                 <article id="redacaoEditor" class="redacao-page" contenteditable="true" spellcheck="true" data-placeholder="Comece sua redação aqui..." oninput="atualizarRedacao()"></article>
-                <aside id="redacaoComentarios" class="redacao-comments" aria-label="Comentários vinculados à redação"></aside>
             </div>
+            <textarea id="redacaoNotas" class="redacao-notas" placeholder="Anotações, comentários da correção ou pontos para revisar..." oninput="atualizarRedacao()"></textarea>
             <div class="redacao-footer">
                 <button class="btn-voltar-redacoes" type="button" onclick="mostrarBibliotecaRedacoes()">← Voltar para redações</button>
-                <div class="redacao-footer-actions">
+                <div style="display:flex; align-items:center; gap:14px;">
                     <label class="spellcheck-toggle"><input id="modoSemCorrecao" type="checkbox" onchange="alternarCorrecaoCaracteres()"> Sem correção de caracteres</label>
                     <span id="redacaoSalvamento">Ainda não salva</span>
                     <button class="btn-salvar-redacao" type="button" onclick="salvarRedacao()">Salvar redação</button>
@@ -1129,7 +1082,7 @@ input:focus, textarea:focus, select:focus{
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let dados = [], filtroAtual = "Todos", apenasFavoritos = false, flashIndex = 0, indexAtual = null, imagemBase64 = "", imagemEditBase64 = "", flashDeck = [], modoRevisao = false, redacoes = [], redacaoAtualId = null, inscricaoRedacoes = null;
+    let dados = [], filtroAtual = "Todos", apenasFavoritos = false, flashIndex = 0, indexAtual = null, imagemBase64 = "", imagemEditBase64 = "", flashDeck = [], modoRevisao = false, redacoes = [], redacaoAtualId = null;
 
     function format(cmd, val) { document.execCommand(cmd, false, val); }
 
@@ -1144,169 +1097,15 @@ input:focus, textarea:focus, select:focus{
         if (mudou) document.getElementById('redacaoSalvamento').textContent = 'Alterações não salvas';
     }
 
-    function obterComentariosRedacao() {
-        return [...document.querySelectorAll('#redacaoEditor .redacao-comment-marker')].map(marcador => ({
-            id: marcador.dataset.commentId,
-            trecho: marcador.textContent,
-            texto: marcador.dataset.commentText,
-            cor: marcador.style.getPropertyValue('--comentario-cor')
-        }));
-    }
-
-    function alternarComentariosRedacao(mostrar) {
-        const painel = document.getElementById('redacaoComentarios');
-        const botao = document.getElementById('btnComentariosRedacao');
-        if (!painel || !botao) return;
-        const aberto = typeof mostrar === 'boolean' ? mostrar : !painel.classList.contains('is-open');
-        painel.classList.toggle('is-open', aberto);
-        botao.setAttribute('aria-expanded', String(aberto));
-        botao.textContent = aberto ? '× Fechar comentários' : `☰ Comentários${obterComentariosRedacao().length ? ` (${obterComentariosRedacao().length})` : ''}`;
-        if (aberto) requestAnimationFrame(posicionarComentariosRedacao);
-    }
-
-    function alternarLadoComentarios() {
-        const painel = document.getElementById('redacaoComentarios');
-        const botao = document.getElementById('btnLadoComentarios');
-        if (!painel || !botao) return;
-        const esquerda = painel.classList.toggle('on-left');
-        botao.textContent = esquerda ? '← Esquerda' : '→ Direita';
-        requestAnimationFrame(posicionarComentariosRedacao);
-    }
-
-    function posicionarComentariosRedacao() {
-        if (!window.matchMedia('(min-width: 1181px)').matches) return;
-        const palco = document.querySelector('.redacao-stage');
-        const painel = document.getElementById('redacaoComentarios');
-        if (!palco || !painel || !painel.classList.contains('is-open')) return;
-        const palcoRect = palco.getBoundingClientRect();
-        painel.querySelectorAll('.redacao-comment-card').forEach(cartao => {
-            const marcador = document.querySelector(`#redacaoEditor .redacao-comment-marker[data-comment-id="${cartao.dataset.commentId}"]`);
-            if (!marcador) return;
-            const marcadorRect = marcador.getBoundingClientRect();
-            cartao.style.top = `${Math.max(0, marcadorRect.top - palcoRect.top - 45)}px`;
-        });
-    }
-
-    window.addEventListener('resize', posicionarComentariosRedacao);
-
-    function renderizarComentariosRedacao() {
-        const painel = document.getElementById('redacaoComentarios');
-        if (!painel) return;
-        const comentarios = obterComentariosRedacao();
-        const botao = document.getElementById('btnComentariosRedacao');
-        if (botao) botao.classList.toggle('has-comments', Boolean(comentarios.length));
-        if (!comentarios.length) {
-            painel.innerHTML = '<div class="redacao-comments-empty">Selecione um trecho e use <strong>↗ Comentário</strong> para criar uma observação com seta, sem alterar a organização da folha.</div>';
-            alternarComentariosRedacao(false);
-            return;
-        }
-        painel.innerHTML = comentarios.map((comentario, indice) => `<article class="redacao-comment-card" data-comment-id="${comentario.id}" style="--comentario-cor:${comentario.cor || '#7b2cff'}" onclick="expandirComentarioRedacao('${comentario.id}')"><button class="redacao-comment-delete" type="button" title="Remover comentário" onclick="removerComentarioRedacao(event, '${comentario.id}')">×</button><strong>Comentário ${indice + 1}</strong><span class="redacao-comment-text">${escaparHtml(comentario.texto || '')}</span></article>`).join('');
-        if (!painel.classList.contains('is-open')) alternarComentariosRedacao(false);
-        else requestAnimationFrame(posicionarComentariosRedacao);
-    }
-
-    function expandirComentarioRedacao(id) {
-        const painel = document.getElementById('redacaoComentarios');
-        const cartao = painel?.querySelector(`.redacao-comment-card[data-comment-id="${id}"]`);
-        if (!cartao) return;
-        const seraExpandido = !cartao.classList.contains('is-expanded');
-        painel.querySelectorAll('.redacao-comment-card.is-expanded').forEach(item => item.classList.remove('is-expanded'));
-        cartao.classList.toggle('is-expanded', seraExpandido);
-        requestAnimationFrame(posicionarComentariosRedacao);
-    }
-
-    function adicionarComentarioRedacao() {
-        const editor = document.getElementById('redacaoEditor');
-        const selecao = window.getSelection();
-        if (!selecao.rangeCount || selecao.isCollapsed) { alert('Selecione um trecho da redação antes de adicionar um comentário.'); return; }
-        const intervalo = selecao.getRangeAt(0);
-        if (!editor.contains(intervalo.commonAncestorContainer)) { alert('O comentário deve estar vinculado a um trecho da redação.'); return; }
-        const texto = prompt('Escreva o comentário para este trecho:');
-        if (!texto || !texto.trim()) return;
-
-        const id = `comentario-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-        const marcador = document.createElement('span');
-        marcador.className = 'redacao-comment-marker';
-        marcador.dataset.commentId = id;
-        marcador.dataset.commentText = texto.trim();
-        marcador.style.setProperty('--comentario-cor', document.getElementById('corComentario').value || '#7b2cff');
-        marcador.tabIndex = 0;
-        marcador.title = 'Ver comentário vinculado';
-        marcador.setAttribute('onclick', `focarComentarioRedacao('${id}')`);
-        try {
-            intervalo.surroundContents(marcador);
-        } catch {
-            const conteudo = intervalo.extractContents();
-            marcador.appendChild(conteudo);
-            intervalo.insertNode(marcador);
-        }
-        selecao.removeAllRanges();
-        renderizarComentariosRedacao();
-        atualizarRedacao();
-    }
-
-    function focarComentarioRedacao(id) {
-        const marcador = document.querySelector(`#redacaoEditor .redacao-comment-marker[data-comment-id="${id}"]`);
-        if (!marcador) return;
-        alternarComentariosRedacao(true);
-        marcador.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-        marcador.focus({ preventScroll: true });
-    }
-
-    function removerComentarioRedacao(evento, id) {
-        evento.stopPropagation();
-        const marcador = document.querySelector(`#redacaoEditor .redacao-comment-marker[data-comment-id="${id}"]`);
-        if (!marcador) return;
-        marcador.replaceWith(...marcador.childNodes);
-        document.getElementById('redacaoEditor').normalize();
-        renderizarComentariosRedacao();
-        atualizarRedacao();
-    }
-
-    function atualizarStatusNuvem(texto) {
-        const status = document.getElementById('redacaoCloudStatus');
-        if (status) status.textContent = texto;
-    }
-
     function carregarRedacoes() {
-        if (!auth.currentUser) {
-            redacoes = [];
-            atualizarStatusNuvem('Entre com o Google para sincronizar');
+        redacoes = JSON.parse(localStorage.getItem('redacoesSalvas') || '[]');
+        const rascunhoAntigo = JSON.parse(localStorage.getItem('rascunhoRedacao') || 'null');
+        if (!redacoes.length && rascunhoAntigo && (rascunhoAntigo.titulo || rascunhoAntigo.conteudo)) {
+            redacoes = [{ id: String(Date.now()), titulo: rascunhoAntigo.titulo || 'Redação sem título', conteudo: rascunhoAntigo.conteudo || '', atualizadaEm: new Date().toISOString() }];
+            localStorage.setItem('redacoesSalvas', JSON.stringify(redacoes));
+            localStorage.removeItem('rascunhoRedacao');
         }
         renderizarListaRedacoes();
-    }
-
-    async function migrarRedacoesLocais(user) {
-        const antigas = JSON.parse(localStorage.getItem('redacoesSalvas') || '[]');
-        const rascunho = JSON.parse(localStorage.getItem('rascunhoRedacao') || 'null');
-        if (!antigas.length && rascunho && (rascunho.titulo || rascunho.conteudo)) antigas.push({ titulo: rascunho.titulo || 'Redação sem título', conteudo: rascunho.conteudo || '', atualizadaEm: new Date().toISOString() });
-        if (!antigas.length) return;
-
-        const lote = db.batch();
-        antigas.forEach(({ id, ...redacao }) => {
-            lote.set(db.collection('redacoes').doc(), { ...redacao, userId: user.uid, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-        });
-        await lote.commit();
-        localStorage.removeItem('redacoesSalvas');
-        localStorage.removeItem('rascunhoRedacao');
-    }
-
-    async function assinarRedacoesNaNuvem(user) {
-        if (inscricaoRedacoes) inscricaoRedacoes();
-        atualizarStatusNuvem('Sincronizando redações…');
-        try {
-            await migrarRedacoesLocais(user);
-            inscricaoRedacoes = db.collection('redacoes').where('userId', '==', user.uid).onSnapshot(snap => {
-                redacoes = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                atualizarStatusNuvem('Redações salvas na nuvem');
-                renderizarListaRedacoes();
-            }, () => {
-                atualizarStatusNuvem('Não foi possível sincronizar');
-            });
-        } catch (erro) {
-            console.error('Falha ao sincronizar redações:', erro);
-            atualizarStatusNuvem('Não foi possível sincronizar');
-        }
     }
 
     function renderizarListaRedacoes() {
@@ -1318,8 +1117,7 @@ input:focus, textarea:focus, select:focus{
         }
         lista.innerHTML = [...redacoes].sort((a, b) => new Date(b.atualizadaEm) - new Date(a.atualizadaEm)).map(redacao => {
             const palavras = contarPalavrasRedacao((redacao.conteudo || '').replace(/<[^>]*>/g, ' '));
-            const dataOriginal = redacao.atualizadaEm?.toDate ? redacao.atualizadaEm.toDate() : new Date(redacao.atualizadaEm || Date.now());
-            const data = dataOriginal.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+            const data = new Date(redacao.atualizadaEm).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
             const possuiNota = redacao.nota !== null && redacao.nota !== '' && Number.isFinite(Number(redacao.nota)) && Number(redacao.valorMaximo) > 0;
             const nota = possuiNota ? `<span class="redacao-grade">${redacao.banca || 'Avaliação'} · ${redacao.nota} / ${redacao.valorMaximo}</span>` : '';
             return `<article class="redacao-item"><h3>${redacao.titulo || 'Redação sem título'}</h3><p>${palavras} ${palavras === 1 ? 'palavra' : 'palavras'} · Atualizada em ${data}</p>${nota}<div class="redacao-item-actions"><button type="button" onclick="abrirRedacao('${redacao.id}')">Abrir</button><button class="btn-excluir-redacao" type="button" title="Excluir redação" onclick="excluirRedacao('${redacao.id}')">×</button></div></article>`;
@@ -1333,16 +1131,15 @@ input:focus, textarea:focus, select:focus{
     }
 
     function abrirNovaRedacao() {
-        if (!auth.currentUser) { alert('Entre com sua conta Google para criar e salvar redações na nuvem.'); return; }
         redacaoAtualId = null;
         document.getElementById('redacaoTitulo').value = '';
         document.getElementById('redacaoEditor').innerHTML = '';
         document.getElementById('redacaoBanca').value = '';
         document.getElementById('redacaoNota').value = '';
         document.getElementById('redacaoValorMaximo').value = '1000';
+        document.getElementById('redacaoNotas').value = '';
         document.getElementById('modoSemCorrecao').checked = false;
         aplicarModoCorrecao(false);
-        renderizarComentariosRedacao();
         atualizarRedacao(false);
         document.getElementById('redacaoSalvamento').textContent = 'Ainda não salva';
         document.getElementById('bibliotecaRedacoes').style.display = 'none';
@@ -1359,18 +1156,16 @@ input:focus, textarea:focus, select:focus{
         document.getElementById('redacaoBanca').value = redacao.banca || '';
         document.getElementById('redacaoNota').value = redacao.nota ?? '';
         document.getElementById('redacaoValorMaximo').value = redacao.valorMaximo ?? '1000';
+        document.getElementById('redacaoNotas').value = redacao.notas || '';
         document.getElementById('modoSemCorrecao').checked = Boolean(redacao.semCorrecao);
         aplicarModoCorrecao(Boolean(redacao.semCorrecao));
-        renderizarComentariosRedacao();
         atualizarRedacao(false);
-        const dataSalva = redacao.atualizadaEm?.toDate ? redacao.atualizadaEm.toDate() : new Date(redacao.atualizadaEm || Date.now());
-        document.getElementById('redacaoSalvamento').textContent = `Salva em ${dataSalva.toLocaleDateString('pt-BR')}`;
+        document.getElementById('redacaoSalvamento').textContent = `Salva em ${new Date(redacao.atualizadaEm).toLocaleDateString('pt-BR')}`;
         document.getElementById('bibliotecaRedacoes').style.display = 'none';
         document.getElementById('editorRedacao').style.display = 'block';
     }
 
-    async function salvarRedacao() {
-        if (!auth.currentUser) { alert('Entre com sua conta Google para salvar a redação na nuvem.'); return; }
+    function salvarRedacao() {
         const agora = new Date().toISOString();
         const titulo = document.getElementById('redacaoTitulo').value.trim() || 'Redação sem título';
         const conteudo = document.getElementById('redacaoEditor').innerHTML;
@@ -1380,32 +1175,25 @@ input:focus, textarea:focus, select:focus{
             banca: document.getElementById('redacaoBanca').value,
             nota: valorNota === '' ? null : Number(valorNota),
             valorMaximo: valorMaximo === '' ? null : Number(valorMaximo),
+            notas: document.getElementById('redacaoNotas').value,
             semCorrecao: document.getElementById('modoSemCorrecao').checked
         };
-        const dadosRedacao = { titulo, conteudo, ...detalhes, comentarios: obterComentariosRedacao(), atualizadaEm: agora, userId: auth.currentUser.uid };
-        try {
-            if (redacaoAtualId) await db.collection('redacoes').doc(redacaoAtualId).update(dadosRedacao);
-            else {
-                const documento = await db.collection('redacoes').add({ ...dadosRedacao, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-                redacaoAtualId = documento.id;
-            }
-            document.getElementById('redacaoSalvamento').textContent = 'Salva na nuvem';
-            mostrarBibliotecaRedacoes();
-        } catch (erro) {
-            console.error('Falha ao salvar redação:', erro);
-            alert('Não foi possível salvar na nuvem. Verifique sua conexão e tente novamente.');
+        if (redacaoAtualId) {
+            const indice = redacoes.findIndex(item => item.id === redacaoAtualId);
+            if (indice !== -1) redacoes[indice] = { ...redacoes[indice], titulo, conteudo, ...detalhes, atualizadaEm: agora };
+        } else {
+            redacaoAtualId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+            redacoes.push({ id: redacaoAtualId, titulo, conteudo, ...detalhes, atualizadaEm: agora });
         }
+        localStorage.setItem('redacoesSalvas', JSON.stringify(redacoes));
+        mostrarBibliotecaRedacoes();
     }
 
-    async function excluirRedacao(id) {
+    function excluirRedacao(id) {
         if (!confirm('Excluir esta redação salva?')) return;
-        if (!auth.currentUser) return;
-        try {
-            await db.collection('redacoes').doc(id).delete();
-        } catch (erro) {
-            console.error('Falha ao excluir redação:', erro);
-            alert('Não foi possível excluir a redação na nuvem.');
-        }
+        redacoes = redacoes.filter(item => item.id !== id);
+        localStorage.setItem('redacoesSalvas', JSON.stringify(redacoes));
+        renderizarListaRedacoes();
     }
 
     function aplicarModoCorrecao(semCorrecao) {
@@ -1453,30 +1241,16 @@ input:focus, textarea:focus, select:focus{
     }
 
     function definirZoomRedacao(valor) {
-        const zoom = Math.min(200, Math.max(100, Number(valor)));
-        const controle = document.getElementById('zoomRedacao');
-        controle.value = zoom;
-        document.getElementById('redacaoEditor').style.zoom = zoom / 100;
-        document.getElementById('redacaoEditor').style.transform = 'none';
+        const zoom = Number(valor);
+        document.getElementById('redacaoEditor').style.transform = `scale(${zoom / 100})`;
         document.getElementById('zoomRedacaoValor').textContent = `${zoom}%`;
-        requestAnimationFrame(posicionarComentariosRedacao);
     }
 
     function alterarZoomRedacao(delta) {
         const controle = document.getElementById('zoomRedacao');
-        definirZoomRedacao(Number(controle.value) + delta);
-    }
-
-    function ajustarZoomRedacao() {
-        const editor = document.getElementById('redacaoEditor');
-        const palco = document.querySelector('.redacao-stage');
-        if (!editor || !palco) return;
-        const zoomAnterior = editor.style.zoom;
-        editor.style.zoom = 1;
-        const larguraFolha = editor.getBoundingClientRect().width;
-        const larguraDisponivel = palco.clientWidth - 8;
-        editor.style.zoom = zoomAnterior;
-        definirZoomRedacao(Math.max(100, Math.round((larguraDisponivel / larguraFolha) * 100)));
+        const novoValor = Math.min(130, Math.max(70, Number(controle.value) + delta));
+        controle.value = novoValor;
+        definirZoomRedacao(novoValor);
     }
 
 
@@ -1562,7 +1336,6 @@ input:focus, textarea:focus, select:focus{
         if (user) {
             document.getElementById("btnLogin").innerText = "Sair";
             atualizarBannerEixo();
-            assinarRedacoesNaNuvem(user);
             db.collection("repertorios").where("userId", "==", user.uid).onSnapshot(snap => {
                 dados = snap.docs.map(doc => {
                     const data = doc.data();
@@ -1581,10 +1354,6 @@ input:focus, textarea:focus, select:focus{
         } else {
             document.getElementById("btnLogin").innerText = "Login Google";
             atualizarBannerEixo();
-            if (inscricaoRedacoes) { inscricaoRedacoes(); inscricaoRedacoes = null; }
-            redacoes = [];
-            atualizarStatusNuvem('Entre com o Google para sincronizar');
-            renderizarListaRedacoes();
             const localReps = JSON.parse(localStorage.getItem("reps")) || [];
             dados = localReps.map(r => ({...r, createdAt: new Date(r.createdAt)}));
             render();
@@ -1841,7 +1610,7 @@ document.getElementById("sidebar").addEventListener("click", function(e){
 
 });
 
-    function switchTab(tabId, btn) { document.querySelectorAll('.section').forEach(s => s.style.display = 'none'); document.getElementById('tab-' + tabId).style.display = 'block'; document.getElementById('bannerPrincipal').style.display = ['flashcards', 'redacoes'].includes(tabId) ? 'none' : 'flex'; if (tabId === 'redacoes') mostrarBibliotecaRedacoes(); document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(window.innerWidth <= 768) toggleMenu(); }
+    function switchTab(tabId, btn) { document.querySelectorAll('.section').forEach(s => s.style.display = 'none'); document.getElementById('tab-' + tabId).style.display = 'block'; document.getElementById('bannerPrincipal').style.display = tabId === 'flashcards' ? 'none' : 'flex'; if (tabId === 'redacoes') mostrarBibliotecaRedacoes(); document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if(window.innerWidth <= 768) toggleMenu(); }
     function fecharModal(e) { if(!e || e.target.id === "modal" || e.target.className === "close-btn") { document.getElementById('modalContent').style.transform = "scale(0.9)"; setTimeout(() => document.getElementById('modal').style.display = "none", 200); } }
     function toggleTema() {
 
