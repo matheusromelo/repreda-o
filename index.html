@@ -820,22 +820,26 @@ input:focus, textarea:focus, select:focus{
 .highlight-picker { display: inline-flex; align-items: center; gap: 5px; padding: 4px 7px; border: 1px solid var(--input); border-radius: 9px; background: var(--card); }
 .highlight-picker input { width: 24px; height: 24px; margin: 0; padding: 0; border: none; background: none; cursor: pointer; }
 .redacao-comment-action { display: inline-flex; align-items: center; gap: 5px; color: var(--primary) !important; border-color: color-mix(in srgb, var(--primary) 28%, var(--input)) !important; }
-.redacao-stage { display: flex; align-items: flex-start; gap: 22px; min-height: 1120px; padding: 34px 0; background: transparent; }
-.redacao-page { flex: 1; width: 650px; min-height: 1000px; margin: 0; padding: 76px 64px; transform-origin: top center; background: #fffdf9; color: #292523; box-shadow: 0 22px 55px rgba(20,15,10,0.20); font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.8; outline: none; transition: transform 0.2s; }
+.redacao-comments-toggle { color: var(--text-alt) !important; }
+.redacao-comments-toggle.has-comments { color: var(--primary) !important; border-color: color-mix(in srgb, var(--primary) 28%, var(--input)) !important; }
+.redacao-stage { display: flex; justify-content: center; align-items: flex-start; min-height: 1120px; padding: 34px 0; background: transparent; }
+.redacao-page { flex: 0 1 650px; width: 650px; min-height: 1000px; margin: 0; padding: 76px 64px; transform-origin: top center; background: #fffdf9; color: #292523; box-shadow: 0 22px 55px rgba(20,15,10,0.20); font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.8; outline: none; transition: transform 0.2s; }
 .redacao-page:empty::before { content: attr(data-placeholder); color: #a59d97; pointer-events: none; }
 .dark .redacao-page { background: #252329; color: #f4f0ec; box-shadow: 0 22px 55px rgba(0,0,0,0.45); }
 .dark .redacao-page:empty::before { color: #918a85; }
 .redacao-comment-marker { position: relative; padding: 0 2px; border-bottom: 2px solid var(--comentario-cor, #7b2cff); background: color-mix(in srgb, var(--comentario-cor, #7b2cff) 12%, transparent); border-radius: 3px; cursor: pointer; }
 .redacao-comment-marker::after { content: '➜'; display: inline-block; margin-left: 3px; color: var(--comentario-cor, #7b2cff); font-family: system-ui, sans-serif; font-size: .72em; font-weight: 900; line-height: 1; transform: translateY(-1px); }
-.redacao-comments { width: 218px; flex: 0 0 218px; display: grid; gap: 11px; padding-top: 18px; }
+.redacao-comments { position: fixed; z-index: 1200; top: 104px; right: 24px; display: none; width: 245px; max-height: calc(100vh - 132px); gap: 11px; overflow-y: auto; padding: 8px 8px 12px 24px; }
+.redacao-comments.is-open { display: grid; animation: comentariosEntrar .22s ease both; }
+@keyframes comentariosEntrar { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: translateX(0); } }
 .redacao-comments-empty { padding: 15px; border: 1px dashed color-mix(in srgb, var(--primary) 35%, transparent); border-radius: 14px; color: var(--text-alt); font-size: 12px; line-height: 1.45; text-align: center; }
 .redacao-comment-card { --comentario-cor: #7b2cff; position: relative; padding: 13px 30px 13px 14px; border: 1px solid color-mix(in srgb, var(--comentario-cor) 25%, transparent); border-radius: 14px; background: var(--card); box-shadow: 0 8px 22px rgba(20, 10, 50, .08); color: var(--text); cursor: pointer; font-size: 12px; line-height: 1.45; transition: transform .2s, box-shadow .2s; }
 .redacao-comment-card::before { content: '⟵'; position: absolute; left: -21px; top: 15px; color: var(--comentario-cor); font-size: 22px; font-weight: 900; }
 .redacao-comment-card:hover { transform: translateX(3px); box-shadow: 0 12px 26px rgba(20, 10, 50, .14); }
 .redacao-comment-card strong { display: block; margin-bottom: 4px; color: var(--comentario-cor); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
 .redacao-comment-delete { position: absolute; top: 6px; right: 7px; border: none; background: transparent; color: var(--text-alt); cursor: pointer; font-size: 15px; }
-@media (max-width: 860px) { .redacao-stage { flex-direction: column; } .redacao-page { width: 100%; margin: 0 auto; } .redacao-comments { width: 100%; flex-basis: auto; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); padding: 0 10px; } .redacao-comment-card::before { display: none; } }
-@media (max-width: 600px) { .grade-summary { grid-template-columns: 1fr; } .redacao-hero { align-items: flex-start; flex-direction: column; padding: 24px; } .redacao-library-header { align-items: flex-start; flex-direction: column; } .redacao-topbar { align-items: stretch; flex-direction: column; } .redacao-details { grid-template-columns: 1fr 1fr; } .redacao-details select { grid-column: 1 / -1; } .zoom-control { margin-left: 0; } .redacao-stage { align-items: center; min-height: 0; padding: 20px 0 28px; overflow-x: auto; } .redacao-page { flex: none; width: 100%; min-height: calc((100vw - 50px) * 1.414); padding: 38px 28px; font-size: 15px; } .redacao-comments { padding: 0; grid-template-columns: 1fr; } }
+@media (max-width: 860px) { .redacao-page { width: 100%; margin: 0 auto; } }
+@media (max-width: 600px) { .grade-summary { grid-template-columns: 1fr; } .redacao-hero { align-items: flex-start; flex-direction: column; padding: 24px; } .redacao-library-header { align-items: flex-start; flex-direction: column; } .redacao-topbar { align-items: stretch; flex-direction: column; } .redacao-details { grid-template-columns: 1fr 1fr; } .redacao-details select { grid-column: 1 / -1; } .zoom-control { margin-left: 0; } .redacao-stage { align-items: center; min-height: 0; padding: 20px 0 28px; overflow-x: auto; } .redacao-page { flex: none; width: 100%; min-height: calc((100vw - 50px) * 1.414); padding: 38px 28px; font-size: 15px; } .redacao-comments { top: 84px; right: 12px; width: min(310px, calc(100vw - 24px)); max-height: calc(100vh - 104px); padding: 6px 4px 12px; } .redacao-comment-card::before { display: none; } }
 
 
 </style>
@@ -1038,6 +1042,7 @@ input:focus, textarea:focus, select:focus{
                 <button type="button" title="Título" onmousedown="event.preventDefault()" onclick="formatarRedacao('formatBlock', 'h2')">H2</button>
                 <button type="button" title="Lista" onmousedown="event.preventDefault()" onclick="formatarRedacao('insertUnorderedList')">• Lista</button>
                 <button class="redacao-comment-action" type="button" title="Adicionar comentário à seleção" onmousedown="event.preventDefault()" onclick="adicionarComentarioRedacao()">↗ Comentário</button>
+                <button id="btnComentariosRedacao" class="redacao-comments-toggle" type="button" title="Mostrar comentários" aria-expanded="false" onclick="alternarComentariosRedacao()">☰ Comentários</button>
                 <span class="toolbar-divider"></span>
                 <button type="button" title="Alinhar à esquerda" onmousedown="event.preventDefault()" onclick="formatarRedacao('justifyLeft')">≡</button>
                 <button type="button" title="Centralizar" onmousedown="event.preventDefault()" onclick="formatarRedacao('justifyCenter')">≣</button>
@@ -1135,15 +1140,29 @@ input:focus, textarea:focus, select:focus{
         }));
     }
 
+    function alternarComentariosRedacao(mostrar) {
+        const painel = document.getElementById('redacaoComentarios');
+        const botao = document.getElementById('btnComentariosRedacao');
+        if (!painel || !botao) return;
+        const aberto = typeof mostrar === 'boolean' ? mostrar : !painel.classList.contains('is-open');
+        painel.classList.toggle('is-open', aberto);
+        botao.setAttribute('aria-expanded', String(aberto));
+        botao.textContent = aberto ? '× Fechar comentários' : `☰ Comentários${obterComentariosRedacao().length ? ` (${obterComentariosRedacao().length})` : ''}`;
+    }
+
     function renderizarComentariosRedacao() {
         const painel = document.getElementById('redacaoComentarios');
         if (!painel) return;
         const comentarios = obterComentariosRedacao();
+        const botao = document.getElementById('btnComentariosRedacao');
+        if (botao) botao.classList.toggle('has-comments', Boolean(comentarios.length));
         if (!comentarios.length) {
             painel.innerHTML = '<div class="redacao-comments-empty">Selecione um trecho e use <strong>↗ Comentário</strong> para criar uma observação com seta, sem alterar a organização da folha.</div>';
+            alternarComentariosRedacao(false);
             return;
         }
         painel.innerHTML = comentarios.map((comentario, indice) => `<article class="redacao-comment-card" style="--comentario-cor:${comentario.cor || '#7b2cff'}" onclick="focarComentarioRedacao('${comentario.id}')"><button class="redacao-comment-delete" type="button" title="Remover comentário" onclick="removerComentarioRedacao(event, '${comentario.id}')">×</button><strong>Comentário ${indice + 1}</strong>${escaparHtml(comentario.texto || '')}</article>`).join('');
+        if (!painel.classList.contains('is-open')) alternarComentariosRedacao(false);
     }
 
     function adicionarComentarioRedacao() {
@@ -1164,6 +1183,7 @@ input:focus, textarea:focus, select:focus{
         marcador.style.setProperty('--comentario-cor', cores[obterComentariosRedacao().length % cores.length]);
         marcador.tabIndex = 0;
         marcador.title = 'Ver comentário vinculado';
+        marcador.setAttribute('onclick', `focarComentarioRedacao('${id}')`);
         try {
             intervalo.surroundContents(marcador);
         } catch {
@@ -1179,6 +1199,7 @@ input:focus, textarea:focus, select:focus{
     function focarComentarioRedacao(id) {
         const marcador = document.querySelector(`#redacaoEditor .redacao-comment-marker[data-comment-id="${id}"]`);
         if (!marcador) return;
+        alternarComentariosRedacao(true);
         marcador.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
         marcador.focus({ preventScroll: true });
     }
